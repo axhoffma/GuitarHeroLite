@@ -106,6 +106,7 @@ int highScore = 0;
 unsigned int TC7Array [24] = {459,433,409,386,364,344,324,306,289,273,258,243,229,216,204,193,182,172,162,153,144,136,129,121};
 enum note{C3, C3s, D3, D3s, E3, F3, F3s, G3, G3s, A3, A3s, B3, C4, C4s, D4, D4s, E4, F4, F4s, G4, G4s, A4, A4s, B4};
 char runstp = 0;
+unsigned char input = 0;
    	   			 		  			 		       
 
 /* Special ASCII characters */
@@ -124,6 +125,10 @@ char runstp = 0;
 #define CURMOV 0xFE	// LCD cursor move instruction
 #define LINE1  0x80	// LCD line 1 cursor position
 #define LINE2  0xC0	// LCD line 2 cursor position
+#define INPUT1 DDRT_DDRT0
+#define INPUT2 DDRT_DDRT1
+#define INPUT3 DDRT_DDRT2
+#define INPUT4 DDRT_DDRT3
 
 
 	 	   		
@@ -183,12 +188,16 @@ void  initializations(void) {
   TC7 = 229; //interrupts set up to fire an interrupt rate of 52,400 Hz for middle C
 /* Initialize LED screen */
   DDRT = 0x1C;
-  PTT_PTT4 = 0; 
-  PTT_PTT3  = 1;
+  PTT_PTT4  = 1; 
+  PTT_PTT3  = 0;
   send_i(LCDON);
   send_i(TWOLINE);
   send_i(LCDCLR);
   lcdwait();
+
+/* initialize Pushbuttons */
+  DDRAD = 0x0F;
+  
 	      
 }
 
@@ -230,6 +239,20 @@ interrupt 7 void RTI_ISR(void)
 {
     // clear RTI interrupt flagt 
     CRGFLG = CRGFLG | 0x80; 
+    input = 0;
+    if(INPUT1) {
+        input = input ^ 0x80;
+    }
+    if(INPUT2) {
+        input = input ^ 0x40;
+    }
+    if(INPUT3) {
+        input = input ^ 0x20;
+    }
+    if(INPUT3) {
+        input = input ^ 0x10;
+    }
+    
 }
 
 /*
@@ -252,6 +275,45 @@ interrupt 15 void TIM_ISR(void)
 	else{ PWMDTY1 = 0;}
 }
 
+/*
+***********************************************************************                       
+  Sound routines
+***********************************************************************
+*/
+void push_test() {
+    for(;;) {
+        display_buttons();
+        lcdwait();
+    }
+}
+
+void display_buttons() {
+    chgline(LINE1);
+    if(input & 0x80) {
+        print_c('1');
+    }
+    else {
+        print_c('0');
+    }
+    if(input & 0x40) {
+        print_c('1');
+    }
+    else {
+        print_c('0');
+    }
+    if(input & 0x20) {
+        print_c('1');
+    }
+    else {
+        print_c('0');
+    }
+    if(input & 0x10) {
+        print_c('1');
+    }
+    else {
+        print_c('0');
+    }
+}
 /*
 ***********************************************************************                       
   Score routines
@@ -294,6 +356,7 @@ void display_score(void) {
     print_c(tens + 48);
     print_c(ones + 48);
     chgline(LINE2);
+    pmsglcd("High Score: ");
     thousands = highScore / 1000;
     hundreds = (highScore % 1000) / 100;
     tens = ((highScore % 1000) % 100) / 10;
