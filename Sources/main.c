@@ -103,6 +103,7 @@ char sineArray [200] = {127,131,135,139,142,146,150,154,158,162,166,170,173,177,
 char sineptr = 0; //ptr used to cycle through the sine values
 int playerScore = 0;
 int highScore = 0;
+unsigned char input = 0;
 
    	   			 		  			 		       
 
@@ -122,6 +123,10 @@ int highScore = 0;
 #define CURMOV 0xFE	// LCD cursor move instruction
 #define LINE1  0x80	// LCD line 1 cursor position
 #define LINE2  0xC0	// LCD line 2 cursor position
+#define INPUT1 DDRT_DDRT0
+#define INPUT2 DDRT_DDRT1
+#define INPUT3 DDRT_DDRT2
+#define INPUT4 DDRT_DDRT3
 
 
 	 	   		
@@ -189,6 +194,10 @@ void  initializations(void) {
   send_i(TWOLINE);
   send_i(LCDCLR);
   lcdwait();
+
+/* initialize Pushbuttons */
+  DDRAD = 0x0F;
+  
 	      
 }
 
@@ -230,6 +239,20 @@ interrupt 7 void RTI_ISR(void)
 {
     // clear RTI interrupt flagt 
     CRGFLG = CRGFLG | 0x80; 
+    input = 0;
+    if(INPUT1) {
+        input = input ^ 0x80;
+    }
+    if(INPUT2) {
+        input = input ^ 0x40;
+    }
+    if(INPUT3) {
+        input = input ^ 0x20;
+    }
+    if(INPUT3) {
+        input = input ^ 0x10;
+    }
+    
 }
 
 /*
@@ -249,6 +272,45 @@ interrupt 15 void TIM_ISR(void)
 	sineptr = (sineptr + 1) % 200;
 }
 
+/*
+***********************************************************************                       
+  Sound routines
+***********************************************************************
+*/
+void push_test() {
+    for(;;) {
+        display_buttons();
+        lcdwait();
+    }
+}
+
+void display_buttons() {
+    chgline(LINE1);
+    if(input & 0x80) {
+        print_c('1');
+    }
+    else {
+        print_c('0');
+    }
+    if(input & 0x40) {
+        print_c('1');
+    }
+    else {
+        print_c('0');
+    }
+    if(input & 0x20) {
+        print_c('1');
+    }
+    else {
+        print_c('0');
+    }
+    if(input & 0x10) {
+        print_c('1');
+    }
+    else {
+        print_c('0');
+    }
+}
 /*
 ***********************************************************************                       
   Score routines
