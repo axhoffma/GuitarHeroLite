@@ -103,7 +103,9 @@ unsigned char sineArray [200] = {127,131,135,139,142,146,150,154,158,162,166,170
 unsigned char sineptr = 0; //ptr used to cycle through the sine values
 int playerScore = 0;
 int highScore = 0;
-
+unsigned int TC7Array [24] = {459,433,409,386,364,344,324,306,289,273,258,243,229,216,204,193,182,172,162,153,144,136,129,121};
+enum note{C3, C3s, D3, D3s, E3, F3, F3s, G3, G3s, A3, A3s, B3, C4, C4s, D4, D4s, E4, F4, F4s, G4, G4s, A4, A4s, B4};
+char runstp = 0;
    	   			 		  			 		       
 
 /* Special ASCII characters */
@@ -178,8 +180,7 @@ void  initializations(void) {
   TIE = 0x00; //No interrupts initially
   TCTL1 = 0x00; //Disconnected from output logic
   TSCR2 = 0x09; //Counter Resets on Channel 7. Clock scaler = 2 
-  TC7 = 229; //interrupts set up to fire an interrupt rate of 52,400 Hz 
- // interrupt rate is 1,000 Hz
+  TC7 = 229; //interrupts set up to fire an interrupt rate of 52,400 Hz for middle C
 /* Initialize LED screen */
   DDRT = 0x1C;
   PTT_PTT4 = 0; 
@@ -244,8 +245,11 @@ interrupt 15 void TIM_ISR(void)
 	//generate the sinewave using the lookup table set up to generate a
 	//261.6 Hz sinewave using a 52,320 Hz interrupt rate | closer to a 
 	//262 Hz wave 
-	PWMDTY1 = sineArray[sineptr];
-	sineptr = (sineptr + 1) % 200;
+	if(runstp){
+		PWMDTY1 = sineArray[sineptr];
+		sineptr = (sineptr + 1) % 200;
+	}
+	else{ PWMDTY1 = 0;}
 }
 
 /*
