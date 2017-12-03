@@ -88,11 +88,13 @@ void push_test(void);
 void update_score(int);
 void display_score(void);
 
+/* Sound functions */
+void populate_song(void);
 
 
 /* Test function initilization here */
 //#define SCREEN_TEST
-#define SCORE_TEST 1
+//#define SCORE_TEST 1
 //#define PUSH_TEST
 
 
@@ -101,13 +103,36 @@ void display_score(void);
 //table below is the PWMDTY value that will generate a sine wave when cycled through
 unsigned char sineArray [200] = {127,131,135,139,142,146,150,154,158,162,166,170,173,177,181,184,188,191,195,198,201,205,208,211,214,217,219,222,225,227,230,232,234,236,238,240,242,243,245,246,248,249,250,251,251,252,253,253,253,253,253,253,253,253,252,252,251,250,249,248,247,246,244,243,241,239,237,235,233,231,228,226,223,221,218,215,212,209,206,203,200,197,193,190,186,183,179,175,172,168,164,160,156,152,148,144,141,137,133,129,125,120,116,113,109,105,101,97,93,89,85,81,78,74,70,67,63,60,56,53,50,47,44,41,38,35,32,30,27,25,22,20,18,16,14,12,10,9,7,6,5,4,3,2,1,1,0,0,0,0,0,0,0,0,1,2,2,3,4,5,7,8,10,11,13,15,17,19,21,23,26,28,31,34,36,39,42,45,48,52,55,58,62,65,69,72,76,80,83,87,91,95,99,103,107,110,114,118,122,126};
 unsigned char sineptr = 0; //ptr used to cycle through the sine values
+
 int playerScore = 0;
 int highScore = 0;
-unsigned int TC7Array [24] = {459,433,409,386,364,344,324,306,289,273,258,243,229,216,204,193,182,172,162,153,144,136,129,121};
-enum note{C3, C3s, D3, D3s, E3, F3, F3s, G3, G3s, A3, A3s, B3, C4, C4s, D4, D4s, E4, F4, F4s, G4, G4s, A4, A4s, B4};
+
+enum note{C3 = 459, C3s = 433, D3 = 409, D3s = 386, E3 = 364, F3 = 344, F3s = 324, G3 = 306,
+          G3s = 289, A3 = 273, A3s = 258, B3 = 243, C4 = 229, C4s = 216, D4 = 204, D4s = 193,
+          E4 = 182, F4 = 172, F4s = 162, G4 = 153, G4s = 144, A4 = 136, A4s = 129, B4 = 121};
 char runstp = 0;
 unsigned char input = 0;
-   	   			 		  			 		       
+
+
+/* Structure to represent a musical note */
+typedef struct Note {
+    enum note; 
+    float beats;
+} Note;
+
+/* Numbers used to define musical notation */
+float BPM = 100; //Beats per minute
+float BPS = BPM / 60; //Beats per second
+float IPB = BPS * .0002048; //Interrupts per Beat
+
+Note lastNote; //duration of the last note
+int rtiCnt = 0; //number of interrupts since last update
+
+/*Array of Notes that represents the song */
+Note song[5];
+int songptr = 0;
+
+/*Array of ints that represents the playboard
 
 /* Special ASCII characters */
 #define CR 0x0D		// ASCII return 
@@ -125,10 +150,19 @@ unsigned char input = 0;
 #define CURMOV 0xFE	// LCD cursor move instruction
 #define LINE1  0x80	// LCD line 1 cursor position
 #define LINE2  0xC0	// LCD line 2 cursor position
+
+
+/* Input port mappings */
 #define INPUT1 DDRT_DDRT0
 #define INPUT2 DDRT_DDRT1
 #define INPUT3 DDRT_DDRT2
 #define INPUT4 DDRT_DDRT3
+
+
+#define NOTE1 0x80
+#define NOTE2 0x40
+#define NOTE3 0x20
+#define NOTE4 0x10
 
 
 	 	   		
@@ -186,6 +220,7 @@ void  initializations(void) {
   TCTL1 = 0x00; //Disconnected from output logic
   TSCR2 = 0x09; //Counter Resets on Channel 7. Clock scaler = 2 
   TC7 = 229; //interrupts set up to fire an interrupt rate of 52,400 Hz for middle C
+
 /* Initialize LED screen */
   DDRT = 0x1C;
   PTT_PTT4  = 1; 
@@ -201,6 +236,15 @@ void  initializations(void) {
 	      
 }
 
+void populate_song() {
+    song[0] = {C4, 4};
+    song[1] = {E4, 4};
+    song[2] = {G4, 4};
+    song[3] = {E4, 4};
+    song[4] = {C4, 4};
+    lastNote.note = C4;
+    lastNote.beat = 0;
+}
 	 		  			 		  		
 /*	 		  			 		  		
 ***********************************************************************
@@ -210,6 +254,7 @@ Main
 void main(void) {
     DisableInterrupts
     initializations(); 		  			 		  		
+    populate_song();
     EnableInterrupts;
 #ifdef SCREEN_TEST
     screen_test();
@@ -239,6 +284,7 @@ interrupt 7 void RTI_ISR(void)
 {
     // clear RTI interrupt flagt 
     CRGFLG = CRGFLG | 0x80; 
+    rtiCnt++;
     input = 0;
     if(INPUT1) {
         input = input ^ 0x80;
@@ -252,6 +298,16 @@ interrupt 7 void RTI_ISR(void)
     if(INPUT3) {
         input = input ^ 0x10;
     }
+
+    //Check if we need to update the note
+    if(rtiCnt >= (lastNote.beat * IPB)){ 
+        lastNote = song[songPtr++];
+        //Send new note to be outputted
+        //Update score
+        update_score(1);
+    }
+   //Update screen 
+
     
 }
 
@@ -280,6 +336,8 @@ interrupt 15 void TIM_ISR(void)
   Sound routines
 ***********************************************************************
 */
+
+
 void push_test() {
     for(;;) {
         display_buttons();
