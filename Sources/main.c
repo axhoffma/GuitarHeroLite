@@ -92,14 +92,14 @@ void display_score(void);
 
 /* Test function initilization here */
 //#define SCREEN_TEST
-#define SCORE_TEST
+#define SCORE_TEST 1
 //#define PUSH_TEST
 
 
 
 /* Variable declarations */
 //table below is the PWMDTY value that will generate a sine wave when cycled through
-char sineArray [200] = {127,131,135,139,142,146,150,154,158,162,166,170,173,177,181,184,188,191,195,198,201,205,208,211,214,217,219,222,225,227,230,232,234,236,238,240,242,243,245,246,248,249,250,251,251,252,253,253,253,253,253,253,253,253,252,252,251,250,249,248,247,246,244,243,241,239,237,235,233,231,228,226,223,221,218,215,212,209,206,203,200,197,193,190,186,183,179,175,172,168,164,160,156,152,148,144,141,137,133,129,125,120,116,113,109,105,101,97,93,89,85,81,78,74,70,67,63,60,56,53,50,47,44,41,38,35,32,30,27,25,22,20,18,16,14,12,10,9,7,6,5,4,3,2,1,1,0,0,0,0,0,0,0,0,1,2,2,3,4,5,7,8,10,11,13,15,17,19,21,23,26,28,31,34,36,39,42,45,48,52,55,58,62,65,69,72,76,80,83,87,91,95,99,103,107,110,114,118,122,126}
+char sineArray [200] = {127,131,135,139,142,146,150,154,158,162,166,170,173,177,181,184,188,191,195,198,201,205,208,211,214,217,219,222,225,227,230,232,234,236,238,240,242,243,245,246,248,249,250,251,251,252,253,253,253,253,253,253,253,253,252,252,251,250,249,248,247,246,244,243,241,239,237,235,233,231,228,226,223,221,218,215,212,209,206,203,200,197,193,190,186,183,179,175,172,168,164,160,156,152,148,144,141,137,133,129,125,120,116,113,109,105,101,97,93,89,85,81,78,74,70,67,63,60,56,53,50,47,44,41,38,35,32,30,27,25,22,20,18,16,14,12,10,9,7,6,5,4,3,2,1,1,0,0,0,0,0,0,0,0,1,2,2,3,4,5,7,8,10,11,13,15,17,19,21,23,26,28,31,34,36,39,42,45,48,52,55,58,62,65,69,72,76,80,83,87,91,95,99,103,107,110,114,118,122,126};
 char sineptr = 0; //ptr used to cycle through the sine values
 int playerScore = 0;
 int highScore = 0;
@@ -120,8 +120,8 @@ int highScore = 0;
 #define LCDCLR 0x01	// LCD clear display command
 #define TWOLINE 0x38	// LCD 2-line enable command
 #define CURMOV 0xFE	// LCD cursor move instruction
-#define LINE1 = 0x80	// LCD line 1 cursor position
-#define LINE2 = 0xC0	// LCD line 2 cursor position
+#define LINE1  0x80	// LCD line 1 cursor position
+#define LINE2  0xC0	// LCD line 2 cursor position
 
 
 	 	   		
@@ -159,17 +159,18 @@ void  initializations(void) {
 
 /* Initialize RTI 2.048 ms interrupt rate */
   RTICTL = 0x41;
-  CRGINIT = 0x80;
+  CRGINT = 0x80;
 
 /* Initialize TIM CH7 for periodic interrupts every ms */
   TSCR1 = 0x80; //Enable system
   TIOS = 0x80; //Output compare on channel 7
   TIE = 0x00; //No interrupts initially
   TCTL1 = 0x00; //Disconnected from output logic
-  TSRCR2 = 0x0E; //Counter Resets on Channel 7. Clock scaler = 64
+  TSCR2 = 0x0E; //Counter Resets on Channel 7. Clock scaler = 64
   TC7 = 375;
 
 /* Initialize LED screen */
+  DDRT = 0x1C;
   LCDCLK = 0; 
   LCDRW  = 1;
   send_i(LCDON);
@@ -250,8 +251,8 @@ void update_score(int hit) {
     if(hit) {
         playerScore++;
     }
-    if(playerScore > maxScore) [
-        maxScore = playerScore;
+    if(playerScore > highScore) [
+        highScore = playerScore;
     }
     display_score();
 }
@@ -265,7 +266,7 @@ void display_score(void) {
     hundreds = (playerScore % 1000) / 100;
     tens = ((playerScore % 1000) % 100) / 10;
     ones = (((playerScore % 1000) % 100) % 10;
-    send_i(LCDCLEAR);
+    send_i(LCDCLR);
     chgline(LINE1);
     pmsglcd("Score: ");
     print_c(thousands + 48);
@@ -291,7 +292,7 @@ void display_score(void) {
 
 void shiftout(char output) {
     //Wait for register to be clear
-    while(!SPISR_SPRTEF) {}
+    while(!SPISR_SPTEF) {}
     SPIDR = output; 
     //Wait for 30 cycles
     asm {
@@ -324,9 +325,9 @@ void lcdwait(void) {
 
 void send_byte(char byte) {
     shiftout(byte);
-    LCD_CLOCK = 0;
-    LCD_CLOCK = 1;
-    LCD_CLOCK = 0;
+    LCDCLK = 0;
+    LCDCLK = 1;
+    LCDCLK = 0;
     lcdwait();
 }
 
