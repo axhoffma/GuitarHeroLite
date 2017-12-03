@@ -161,14 +161,25 @@ void  initializations(void) {
   RTICTL = 0x41;
   CRGINT = 0x80;
 
+/* Initialize the PWM unit*/
+  MODRR = 0x02; //set PT1 to output PWM signal
+  PWME = 0x02;  //enable PWM Channel 1
+  PWMPOL = 0x02; //set PWM Channel 1 to active high polarity
+  PWMCTL = 0; //no concantenation 
+  PWMCAE = 0; //no center align 
+  PWMPER1 = 0xFF; //set max period for channel 1
+  PWMDTY1 = 0; //set no duty cycle to start
+  PWMCLK = 0; //select clock A for channel 1
+  PWMPRCLK = 0; //set clock to 24 MHz
+    
 /* Initialize TIM CH7 for periodic interrupts every ms */
   TSCR1 = 0x80; //Enable system
   TIOS = 0x80; //Output compare on channel 7
   TIE = 0x00; //No interrupts initially
   TCTL1 = 0x00; //Disconnected from output logic
-  TSCR2 = 0x0E; //Counter Resets on Channel 7. Clock scaler = 64
-  TC7 = 375;
-
+  TSRCR2 = 0x09; //Counter Resets on Channel 7. Clock scaler = 2 
+  TC7 = 229; //interrupts set up to fire an interrupt rate of 52,400 Hz 
+ // interrupt rate is 1,000 Hz
 /* Initialize LED screen */
   DDRT = 0x1C;
   LCDCLK = 0; 
@@ -230,6 +241,11 @@ interrupt 15 void TIM_ISR(void)
 {
     // clear TIM CH 7 interrupt flag 
     TFLG1 = TFLG1 | 0x80; 
+	//generate the sinewave using the lookup table set up to generate a
+	//261.6 Hz sinewave using a 52,320 Hz interrupt rate | closer to a 
+	//262 Hz wave 
+	PWMDTY1 = sineArray[sineptr];
+	sineptr = (sineptr + 1) % 200;
 }
 
 /*
