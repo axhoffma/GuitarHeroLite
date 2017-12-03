@@ -177,13 +177,14 @@ void  initializations(void) {
   TIOS = 0x80; //Output compare on channel 7
   TIE = 0x00; //No interrupts initially
   TCTL1 = 0x00; //Disconnected from output logic
-  TSRCR2 = 0x09; //Counter Resets on Channel 7. Clock scaler = 2 
+  TSCR2 = 0x09; //Counter Resets on Channel 7. Clock scaler = 2 
   TC7 = 229; //interrupts set up to fire an interrupt rate of 52,400 Hz 
  // interrupt rate is 1,000 Hz
+ 
 /* Initialize LED screen */
   DDRT = 0x1C;
-  LCDCLK = 0; 
-  LCDRW  = 1;
+  PTT_PTT4  = 1; 
+  PTT_PTT3  = 0;
   send_i(LCDON);
   send_i(TWOLINE);
   send_i(LCDCLR);
@@ -267,7 +268,7 @@ void update_score(int hit) {
     if(hit) {
         playerScore++;
     }
-    if(playerScore > highScore) [
+    if(playerScore > highScore) {
         highScore = playerScore;
     }
     display_score();
@@ -281,7 +282,7 @@ void display_score(void) {
     thousands = playerScore / 1000;
     hundreds = (playerScore % 1000) / 100;
     tens = ((playerScore % 1000) % 100) / 10;
-    ones = (((playerScore % 1000) % 100) % 10;
+    ones = (((playerScore % 1000) % 100)) % 10;
     send_i(LCDCLR);
     chgline(LINE1);
     pmsglcd("Score: ");
@@ -290,10 +291,11 @@ void display_score(void) {
     print_c(tens + 48);
     print_c(ones + 48);
     chgline(LINE2);
+    pmsglcd("High Score: ");
     thousands = highScore / 1000;
     hundreds = (highScore % 1000) / 100;
     tens = ((highScore % 1000) % 100) / 10;
-    ones = (((highScore % 1000) % 100) % 10;
+    ones = (((highScore % 1000) % 100)) % 10;
     print_c(thousands + 48);
     print_c(hundreds + 48);
     print_c(tens + 48);
@@ -341,14 +343,14 @@ void lcdwait(void) {
 
 void send_byte(char byte) {
     shiftout(byte);
-    LCDCLK = 0;
-    LCDCLK = 1;
-    LCDCLK = 0;
+    PTT_PTT4 = 0;
+    PTT_PTT4 = 1;
+    PTT_PTT4 = 0;
     lcdwait();
 }
 
 void send_i(char instruction) {
-    LCDRS = 0;
+    PTT_PTT2 = 0;
     send_byte(instruction);
 }
 
@@ -358,11 +360,11 @@ void chgline(char line) {
 }
 
 void print_c(char character) {
-    LCDRS = 1;
+    PTT_PTT2 = 1;
     send_byte(character);
 }
 
-void pmsglcd(char[] str) {
+void pmsglcd(char str[]) {
     int i = 0;
     while(str[i] != '\0') {
         print_c(str[i]);
