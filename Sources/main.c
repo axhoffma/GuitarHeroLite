@@ -92,7 +92,7 @@ void display_score(void);
 
 /* Test function initilization here */
 //#define SCREEN_TEST
-#define SCORE_TEST
+#define SCORE_TEST 1
 //#define PUSH_TEST
 
 
@@ -120,8 +120,8 @@ int highScore = 0;
 #define LCDCLR 0x01	// LCD clear display command
 #define TWOLINE 0x38	// LCD 2-line enable command
 #define CURMOV 0xFE	// LCD cursor move instruction
-#define LINE1 = 0x80	// LCD line 1 cursor position
-#define LINE2 = 0xC0	// LCD line 2 cursor position
+#define LINE1  0x80	// LCD line 1 cursor position
+#define LINE2  0xC0	// LCD line 2 cursor position
 
 
 	 	   		
@@ -159,7 +159,7 @@ void  initializations(void) {
 
 /* Initialize RTI 2.048 ms interrupt rate */
   RTICTL = 0x41;
-  CRGINIT = 0x80;
+  CRGINT = 0x80;
 
 /* Initialize the PWM unit*/
   MODRR = 0x02; //set PT1 to output PWM signal
@@ -177,12 +177,13 @@ void  initializations(void) {
   TIOS = 0x80; //Output compare on channel 7
   TIE = 0x00; //No interrupts initially
   TCTL1 = 0x00; //Disconnected from output logic
-  TSRCR2 = 0x09; //Counter Resets on Channel 7. Clock scaler = 2 
+  TSCR2 = 0x09; //Counter Resets on Channel 7. Clock scaler = 2 
   TC7 = 229; //interrupts set up to fire an interrupt rate of 52,400 Hz 
  // interrupt rate is 1,000 Hz
 /* Initialize LED screen */
-  LCDCLK = 0; 
-  LCDRW  = 1;
+  DDRT = 0x1C;
+  PTT_PTT4 = 0; 
+  PTT_PTT3  = 1;
   send_i(LCDON);
   send_i(TWOLINE);
   send_i(LCDCLR);
@@ -266,8 +267,8 @@ void update_score(int hit) {
     if(hit) {
         playerScore++;
     }
-    if(playerScore > maxScore) [
-        maxScore = playerScore;
+    if(playerScore > highScore) {
+        highScore = playerScore;
     }
     display_score();
 }
@@ -280,8 +281,8 @@ void display_score(void) {
     thousands = playerScore / 1000;
     hundreds = (playerScore % 1000) / 100;
     tens = ((playerScore % 1000) % 100) / 10;
-    ones = (((playerScore % 1000) % 100) % 10;
-    send_i(LCDCLEAR);
+    ones = (((playerScore % 1000) % 100)) % 10;
+    send_i(LCDCLR);
     chgline(LINE1);
     pmsglcd("Score: ");
     print_c(thousands + 48);
@@ -292,7 +293,7 @@ void display_score(void) {
     thousands = highScore / 1000;
     hundreds = (highScore % 1000) / 100;
     tens = ((highScore % 1000) % 100) / 10;
-    ones = (((highScore % 1000) % 100) % 10;
+    ones = (((highScore % 1000) % 100)) % 10;
     print_c(thousands + 48);
     print_c(hundreds + 48);
     print_c(tens + 48);
@@ -307,7 +308,7 @@ void display_score(void) {
 
 void shiftout(char output) {
     //Wait for register to be clear
-    while(!SPISR_SPRTEF) {}
+    while(!SPISR_SPTEF) {}
     SPIDR = output; 
     //Wait for 30 cycles
     asm {
@@ -340,14 +341,14 @@ void lcdwait(void) {
 
 void send_byte(char byte) {
     shiftout(byte);
-    LCD_CLOCK = 0;
-    LCD_CLOCK = 1;
-    LCD_CLOCK = 0;
+    PTT_PTT4 = 0;
+    PTT_PTT4 = 1;
+    PTT_PTT4 = 0;
     lcdwait();
 }
 
 void send_i(char instruction) {
-    LCDRS = 0;
+    PTT_PTT2 = 0;
     send_byte(instruction);
 }
 
@@ -357,11 +358,11 @@ void chgline(char line) {
 }
 
 void print_c(char character) {
-    LCDRS = 1;
+    PTT_PTT2 = 1;
     send_byte(character);
 }
 
-void pmsglcd(char[] str) {
+void pmsglcd(char str[]) {
     int i = 0;
     while(str[i] != '\0') {
         print_c(str[i]);
