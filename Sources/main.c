@@ -100,7 +100,7 @@ void display_score(void);
 
 /* Variable declarations */
 //table below is the PWMDTY value that will generate a sine wave when cycled through
-char sineArray [200] = {127,131,135,139,142,146,150,154,158,162,166,170,173,177,181,184,188,191,195,198,201,205,208,211,214,217,219,222,225,227,230,232,234,236,238,240,242,243,245,246,248,249,250,251,251,252,253,253,253,253,253,253,253,253,252,252,251,250,249,248,247,246,244,243,241,239,237,235,233,231,228,226,223,221,218,215,212,209,206,203,200,197,193,190,186,183,179,175,172,168,164,160,156,152,148,144,141,137,133,129,125,120,116,113,109,105,101,97,93,89,85,81,78,74,70,67,63,60,56,53,50,47,44,41,38,35,32,30,27,25,22,20,18,16,14,12,10,9,7,6,5,4,3,2,1,1,0,0,0,0,0,0,0,0,1,2,2,3,4,5,7,8,10,11,13,15,17,19,21,23,26,28,31,34,36,39,42,45,48,52,55,58,62,65,69,72,76,80,83,87,91,95,99,103,107,110,114,118,122,126}
+char sineArray [200] = {127,131,135,139,142,146,150,154,158,162,166,170,173,177,181,184,188,191,195,198,201,205,208,211,214,217,219,222,225,227,230,232,234,236,238,240,242,243,245,246,248,249,250,251,251,252,253,253,253,253,253,253,253,253,252,252,251,250,249,248,247,246,244,243,241,239,237,235,233,231,228,226,223,221,218,215,212,209,206,203,200,197,193,190,186,183,179,175,172,168,164,160,156,152,148,144,141,137,133,129,125,120,116,113,109,105,101,97,93,89,85,81,78,74,70,67,63,60,56,53,50,47,44,41,38,35,32,30,27,25,22,20,18,16,14,12,10,9,7,6,5,4,3,2,1,1,0,0,0,0,0,0,0,0,1,2,2,3,4,5,7,8,10,11,13,15,17,19,21,23,26,28,31,34,36,39,42,45,48,52,55,58,62,65,69,72,76,80,83,87,91,95,99,103,107,110,114,118,122,126};
 char sineptr = 0; //ptr used to cycle through the sine values
 int playerScore = 0;
 int maxScore = 0;
@@ -162,14 +162,25 @@ void  initializations(void) {
   RTICTL = 0x41;
   CRGINIT = 0x80;
 
+/* Initialize the PWM unit*/
+  MODRR = 0x02; //set PT1 to output PWM signal
+  PWME = 0x02;  //enable PWM Channel 1
+  PWMPOL = 0x02; //set PWM Channel 1 to active high polarity
+  PWMCTL = 0; //no concantenation 
+  PWMCAE = 0; //no center align 
+  PWMPER1 = 0xFF; //set max period for channel 1
+  PWMDTY1 = 0; //set no duty cycle to start
+  PWMCLK = 0; //select clock A for channel 1
+  PWMPRCLK = 0; //set clock to 24 MHz
+    
 /* Initialize TIM CH7 for periodic interrupts every ms */
   TSCR1 = 0x80; //Enable system
   TIOS = 0x80; //Output compare on channel 7
   TIE = 0x00; //No interrupts initially
   TCTL1 = 0x00; //Disconnected from output logic
-  TSRCR2 = 0x0E; //Counter Resets on Channel 7. Clock scaler = 64
-  TC7 = 375;
-
+  TSRCR2 = 0x09; //Counter Resets on Channel 7. Clock scaler = 2 
+  TC7 = 229; //interrupts set up to fire an interrupt rate of 52,400 Hz 
+ // interrupt rate is 1,000 Hz
 /* Initialize LED screen */
   LCDCLK = 0; 
   LCDRW  = 1;
@@ -230,6 +241,11 @@ interrupt 15 void TIM_ISR(void)
 {
     // clear TIM CH 7 interrupt flag 
     TFLG1 = TFLG1 | 0x80; 
+	//generate the sinewave using the lookup table set up to generate a
+	//261.6 Hz sinewave using a 52,320 Hz interrupt rate | closer to a 
+	//262 Hz wave 
+	PWMDTY1 = sineArray[sineptr];
+	sineptr = (sineptr + 1) % 200;
 }
 
 /*
