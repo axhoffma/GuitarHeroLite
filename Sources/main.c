@@ -63,7 +63,6 @@
 
 #include <hidef.h>      /* common defines and macros */
 #include "derivative.h"      /* derivative-specific definitions */
-#include "platform.h"   /* Common device operations */
 #include <mc9s12c32.h>
 
 /* All functions after main should be initialized here */
