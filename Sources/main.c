@@ -545,31 +545,56 @@ void printscreen() {
 }
 
 void updatescreen(int bits) {
-  int i = 0;
-  for(i = 0; i < 28; i++) {
+    int i = 0;
+    for(i = 0; i < 28; i++) {
     screen[i+4] = screen[i];
-  }
-  if(bits & 0x80) {
+    }
+    if(bits & 0x80) {
     screen[0] = 'O';
-  } else {
+    } else {
     screen[0] = ' ';
-  }
-  if(bits & 0x40) {
+    }
+    if(bits & 0x40) {
     screen[1] = 'O';
-  } else {
+    } else {
     screen[1] = ' ';
-  }
+    }
     if(bits & 0x20) {
     screen[2] = 'O';
-  } else {
+    } else {
     screen[2] = ' ';
-  }
+    }
     if(bits & 0x10) {
     screen[3] = 'O';
-  } else {
+    } else {
     screen[3] = ' ';
-  }
-  printscreen();
+    }
+    clearScreen();
+    printscreen();
+}
+
+void clearScreen() {
+    int i;
+    for(i = 0; i < 30; i++) {
+        outchar('\n');
+    }
+}
+
+void screen_test(void) {
+    for(;;) {
+        updateScreen(NOTE1);
+        updateScreen(0);
+        updateScreen(NODE2);
+        updateScreen(0);
+        updateScreen(NOTE3);
+        updateScreen(0);
+        updateScreen(NOTE4);
+        updateScreen(0);
+        updateScreen(NOTE3);
+        updateScreen(0);
+        updateScreen(NODE2);
+        updateScreen(0);
+    }
 }
 
 
