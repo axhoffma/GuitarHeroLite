@@ -235,7 +235,8 @@ void  initializations(void) {
   lcdwait();
 
 /* initialize Pushbuttons */
-  DDRAD = 0x0F;
+  DDRAD = 0x00;
+  ATDDIEN = 0x0F;
   
 	      
 }
@@ -318,12 +319,23 @@ interrupt 7 void RTI_ISR(void)
     if(rtiCnt >= (lastNote.beats * (293 / 2))){ 
         rtiCnt = 0;
         songPtr = (songPtr + 1) % SONG_SIZE;
+        if(songPtr == 0) {
+            playerScore = 0;
+        }
         lastNote = song[songPtr];
-        //Send new note to be outputted
-        TC7 = lastNote.note;
-        //Update score
-        update_score(1);
-        //Update screen
+        if(board[boardPtr] & input) {
+            runstp = 1;
+            //Send new note to be outputted
+            TC7 = lastNote.note;
+            //Update score
+            update_score(1);
+            //Update screen
+        }
+        else {
+            runstp = 0;
+            update_score(0);
+        }
+        boardPtr = (boardPtr + 1) % SONG_SIZE;
     }
 
     
