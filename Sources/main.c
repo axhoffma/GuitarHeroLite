@@ -116,14 +116,10 @@ unsigned char input = 0;
 
 /* Structure to represent a musical note */
 typedef struct Note {
-    enum note; 
-    float beats;
+    int note; 
+    int beats;
 } Note;
 
-/* Numbers used to define musical notation */
-float BPM = 100; //Beats per minute
-float BPS = BPM / 60; //Beats per second
-float IPB = BPS * .0002048; //Interrupts per Beat
 
 Note lastNote; //duration of the last note
 int rtiCnt = 0; //number of interrupts since last update
@@ -237,13 +233,16 @@ void  initializations(void) {
 }
 
 void populate_song() {
-    song[0] = {C4, 4};
-    song[1] = {E4, 4};
-    song[2] = {G4, 4};
-    song[3] = {E4, 4};
-    song[4] = {C4, 4};
+    song[0].note = C4;
+    song[0].beats = 8;
+    song[1].note = E4;
+    song[1].beats = 8;
+    song[2].note = G4;
+    song[2].beats = 8;
+    song[3].note = E4;
+    song[3].beats = 8;
     lastNote.note = C4;
-    lastNote.beat = 0;
+    lastNote.beats = 0;
 }
 	 		  			 		  		
 /*	 		  			 		  		
@@ -300,7 +299,7 @@ interrupt 7 void RTI_ISR(void)
     }
 
     //Check if we need to update the note
-    if(rtiCnt >= (lastNote.beat * IPB)){ 
+    if(rtiCnt >= (lastNote.beat * (814 / 2))){ 
         lastNote = song[songPtr++];
         //Send new note to be outputted
         //Update score
@@ -321,14 +320,14 @@ interrupt 15 void TIM_ISR(void)
 {
     // clear TIM CH 7 interrupt flag 
     TFLG1 = TFLG1 | 0x80; 
-	//generate the sinewave using the lookup table set up to generate a
-	//261.6 Hz sinewave using a 52,320 Hz interrupt rate | closer to a 
-	//262 Hz wave 
-	if(runstp){
-		PWMDTY1 = sineArray[sineptr];
-		sineptr = (sineptr + 1) % 200;
-	}
-	else{ PWMDTY1 = 0;}
+    //generate the sinewave using the lookup table set up to generate a
+    //261.6 Hz sinewave using a 52,320 Hz interrupt rate | closer to a 
+    //262 Hz wave 
+    if(runstp){
+        PWMDTY1 = sineArray[sineptr];
+        sineptr = (sineptr + 1) % 200;
+    }
+    else{ PWMDTY1 = 0;}
 }
 
 /*
