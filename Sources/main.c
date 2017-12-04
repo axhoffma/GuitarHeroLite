@@ -309,11 +309,10 @@ interrupt 7 void RTI_ISR(void)
     }
 
     //Check if we need to update the note
-    if(rtiCnt >= (lastNote.beats * (814 / 2))){ 
+    if(rtiCnt >= (lastNote.beat * (814 / 2))){ 
         songPtr = (songPtr + 1) % SONG_SIZE;
         lastNote = song[songPtr++];
         //Send new note to be outputted
-
         TC7 = lastNote.note;
         //Update score
         update_score(1);
