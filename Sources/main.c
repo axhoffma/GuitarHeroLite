@@ -87,6 +87,7 @@ void push_test(void);
 /* Score functions */
 void update_score(int);
 void display_score(void);
+void display_buttons(void);
 
 /* Sound functions */
 void populate_song(void);
@@ -125,10 +126,13 @@ Note lastNote; //duration of the last note
 int rtiCnt = 0; //number of interrupts since last update
 
 /*Array of Notes that represents the song */
-Note song[5];
+#define SONG_SIZE 4 
+Note song[SONG_SIZE];
 int songptr = 0;
 
-/*Array of ints that represents the playboard
+/*Array of ints that represents the playboard */
+int board[SONG_SIZE];
+int boardPtr = 0;
 
 /* Special ASCII characters */
 #define CR 0x0D		// ASCII return 
@@ -243,6 +247,12 @@ void populate_song() {
     song[3].beats = 8;
     lastNote.note = C4;
     lastNote.beats = 0;
+
+    //Make the board
+    board[0] = NOTE1;
+    board[1] = NOTE3;
+    board[2] = NOTE4;
+    board[3] = NOTE3;
 }
 	 		  			 		  		
 /*	 		  			 		  		
@@ -300,12 +310,15 @@ interrupt 7 void RTI_ISR(void)
 
     //Check if we need to update the note
     if(rtiCnt >= (lastNote.beat * (814 / 2))){ 
+        songPtr = (songPtr + 1) % SONG_SIZE;
         lastNote = song[songPtr++];
         //Send new note to be outputted
+
+        PT7 = lastNote.notes;
         //Update score
         update_score(1);
+        //Update screen
     }
-   //Update screen 
 
     
 }
