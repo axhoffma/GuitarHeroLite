@@ -87,6 +87,7 @@ void push_test(void);
 /* Score functions */
 void update_score(int);
 void display_score(void);
+void display_buttons(void);
 
 /* Sound functions */
 void populate_song(void);
@@ -125,10 +126,13 @@ Note lastNote; //duration of the last note
 int rtiCnt = 0; //number of interrupts since last update
 
 /*Array of Notes that represents the song */
-Note song[5];
-int songptr = 0;
+#define SONG_SIZE 4 
+Note song[SONG_SIZE];
+int songPtr = 0;
 
-/*Array of ints that represents the playboard
+/*Array of ints that represents the playboard */
+int board[SONG_SIZE];
+int boardPtr = 0;
 
 /* Special ASCII characters */
 #define CR 0x0D		// ASCII return 
@@ -149,10 +153,10 @@ int songptr = 0;
 
 
 /* Input port mappings */
-#define INPUT1 DDRT_DDRT0
-#define INPUT2 DDRT_DDRT1
-#define INPUT3 DDRT_DDRT2
-#define INPUT4 DDRT_DDRT3
+#define INPUT1 PTAD_PTAD0
+#define INPUT2 PTAD_PTAD1
+#define INPUT3 PTAD_PTAD2
+#define INPUT4 PTAD_PTAD3
 
 
 #define NOTE1 0x80
@@ -243,6 +247,12 @@ void populate_song() {
     song[3].beats = 8;
     lastNote.note = C4;
     lastNote.beats = 0;
+
+    //Make the board
+    board[0] = NOTE1;
+    board[1] = NOTE3;
+    board[2] = NOTE4;
+    board[3] = NOTE3;
 }
 	 		  			 		  		
 /*	 		  			 		  		
@@ -254,7 +264,6 @@ void main(void) {
     DisableInterrupts
     initializations(); 		  			 		  		
     populate_song();
-    EnableInterrupts;
 #ifdef SCREEN_TEST
     screen_test();
 #endif
@@ -264,6 +273,7 @@ void main(void) {
 #ifdef SCORE_TEST
     score_test();
 #endif 
+    EnableInterrupts;
     for(;;) {
 
     } /* loop forever */
@@ -294,18 +304,21 @@ interrupt 7 void RTI_ISR(void)
     if(INPUT3) {
         input = input ^ 0x20;
     }
-    if(INPUT3) {
+    if(INPUT4) {
         input = input ^ 0x10;
     }
 
     //Check if we need to update the note
-    if(rtiCnt >= (lastNote.beat * (814 / 2))){ 
+    if(rtiCnt >= (lastNote.beats * (814 / 2))){ 
+        songPtr = (songPtr + 1) % SONG_SIZE;
         lastNote = song[songPtr++];
         //Send new note to be outputted
+
+        TC7 = lastNote.note;
         //Update score
         update_score(1);
+        //Update screen
     }
-   //Update screen 
 
     
 }
@@ -346,25 +359,25 @@ void push_test() {
 
 void display_buttons() {
     chgline(LINE1);
-    if(input & 0x80) {
+    if(INPUT) {
         print_c('1');
     }
     else {
         print_c('0');
     }
-    if(input & 0x40) {
+    if(INPUT) {
         print_c('1');
     }
     else {
         print_c('0');
     }
-    if(input & 0x20) {
+    if(INPUT) {
         print_c('1');
     }
     else {
         print_c('0');
     }
-    if(input & 0x10) {
+    if(INPUT) {
         print_c('1');
     }
     else {
