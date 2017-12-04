@@ -237,7 +237,7 @@ void  initializations(void) {
 /* initialize Pushbuttons */
   DDRAD = 0x00;
   ATDDIEN = 0x0F;
-  
+// INITIALIZE THE TERMINAL WINDOW TO   
 	      
 }
 
@@ -584,7 +584,7 @@ void printscreen() {
     outchar(13);
 }
 
-void updatescreen(int bits) {
+void update_screen(int bits) {
     if(bits & 0x80) {
     screen[0] = 'O';
     } else {
