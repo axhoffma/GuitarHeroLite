@@ -116,8 +116,9 @@ enum note{C3 = 459, C3s = 433, D3 = 409, D3s = 386, E3 = 364, F3 = 344, F3s = 32
 char runstp = 1;
 unsigned char input = 0;
 
-char screen[32] = {' '};
+char screen[4] = {' '};
 char temp = ' ';
+int songbuttons[47] = {2,2,0,2,0,4,2,0,1,0,0,0,8,0,0,0,5,0,0,10,0,0,12,0,0,4,0,2,0,4,8,0,2,1,2,1,0,8,8,0,4,0,12,6,10,0,0};
 
 
 
@@ -636,25 +637,60 @@ void pmsglcd(char str[]) {
 ***********************************************************************
 */
 void printscreen() {
-  int i = 0;
   int j = 0;
-  for(i = 0; i < 8; i++) {
-    for(j = 0; j < 4; j++ ) {
-      temp = screen[4*i+j];
+   for(j = 0; j < 4; j++ ) {
+     temp = screen[j];
+     if (temp == 'O') {
+      outchar(temp);
+      outchar(temp);
+      outchar(temp);
+      outchar(temp);
+      outchar(temp);
+      outchar(temp);
+      outchar(temp);
+      outchar(temp);
+      outchar(temp);
+      outchar(temp);
+      outchar(temp);
+      outchar(temp);
       outchar(temp);
       outchar(' ');
+      outchar(' ');
+      outchar(' ');
+      outchar(' ');
+      outchar(' ');
       outchar(' ');  
+      outchar(' '); 
+      outchar(' '); 
+    } else {
+      outchar(' ');
+      outchar(' ');
+      outchar(' ');
+      outchar(' ');
+      outchar(' ');
+      outchar(' ');
+      outchar(' ');
+      outchar(' ');
+      outchar(' ');
+      outchar(' ');
+      outchar(' ');
+      outchar(' ');
+      outchar(' ');
+      outchar(' ');
+      outchar(' ');
+      outchar(' ');
+      outchar(' ');
+      outchar(' ');
+      outchar(' ');  
+      outchar(' '); 
+      outchar(' ');      
     }
+  }
     outchar('\n');
     outchar(13);
-  }
 }
 
 void update_screen(int bits) {
-    int i = 0;
-    for(i = 0; i < 28; i++) {
-    screen[i+4] = screen[i];
-    }
     if(bits & 0x80) {
     screen[0] = 'O';
     } else {
@@ -725,3 +761,5 @@ void outchar(char x) {
     while (!(SCISR1 & 0x80));  /* wait for output buffer empty */
     SCIDRL = x;
 }
+
+
