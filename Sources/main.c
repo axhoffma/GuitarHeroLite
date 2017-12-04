@@ -116,6 +116,7 @@ unsigned char input = 0;
 
 char screen[4] = {' '};
 char temp = ' ';
+int songbuttons[47] = {2,2,0,2,0,4,2,0,1,0,0,0,8,0,0,0,5,0,0,10,0,0,12,0,0,4,0,2,0,4,8,0,2,1,2,1,0,8,8,0,4,0,12,6,10,0,0};
 
 
 
@@ -237,7 +238,7 @@ void  initializations(void) {
 /* initialize Pushbuttons */
   DDRAD = 0x00;
   ATDDIEN = 0x0F;
-// INITIALIZE THE TERMINAL WINDOW TO   
+  
 	      
 }
 
@@ -655,3 +656,5 @@ void outchar(char x) {
     while (!(SCISR1 & 0x80));  /* wait for output buffer empty */
     SCIDRL = x;
 }
+
+
