@@ -114,6 +114,10 @@ enum note{C3 = 459, C3s = 433, D3 = 409, D3s = 386, E3 = 364, F3 = 344, F3s = 32
 char runstp = 1;
 unsigned char input = 0;
 
+char screen[32] = {' '};
+char temp = ' ';
+
+
 
 /* Structure to represent a musical note */
 typedef struct Note {
@@ -508,6 +512,54 @@ void pmsglcd(char str[]) {
         i++;
     }
 }
+
+/*
+***********************************************************************                       
+  Terminal routines
+***********************************************************************
+*/
+void printscreen() {
+  int i = 0;
+  int j = 0;
+  for(i = 0; i < 8; i++) {
+    for(j = 0; j < 4; j++ ) {
+      temp = screen[4*i+j];
+      outchar(temp);
+      outchar(' ');
+      outchar(' ');  
+    }
+    outchar('\n');
+  }
+}
+
+void updatescreen(int bits) {
+  int i = 0;
+  for(i = 0; i < 28; i++) {
+    screen[i+4] = screen[i];
+  }
+  if(bits & 0x80) {
+    screen[0] = 'O';
+  } else {
+    screen[0] = ' ';
+  }
+  if(bits & 0x40) {
+    screen[1] = 'O';
+  } else {
+    screen[1] = ' ';
+  }
+    if(bits & 0x20) {
+    screen[2] = 'O';
+  } else {
+    screen[2] = ' ';
+  }
+    if(bits & 0x10) {
+    screen[3] = 'O';
+  } else {
+    screen[3] = ' ';
+  }
+  printscreen();
+}
+
 
 /*
 ***********************************************************************
