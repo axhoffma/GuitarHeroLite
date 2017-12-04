@@ -111,7 +111,7 @@ int highScore = 0;
 enum note{C3 = 459, C3s = 433, D3 = 409, D3s = 386, E3 = 364, F3 = 344, F3s = 324, G3 = 306,
           G3s = 289, A3 = 273, A3s = 258, B3 = 243, C4 = 229, C4s = 216, D4 = 204, D4s = 193,
           E4 = 182, F4 = 172, F4s = 162, G4 = 153, G4s = 144, A4 = 136, A4s = 129, B4 = 121};
-char runstp = 0;
+char runstp = 1;
 unsigned char input = 0;
 
 
@@ -238,15 +238,16 @@ void  initializations(void) {
 
 void populate_song() {
     song[0].note = C4;
-    song[0].beats = 8;
+    song[0].beats = 2;
     song[1].note = E4;
-    song[1].beats = 8;
+    song[1].beats = 2;
     song[2].note = G4;
-    song[2].beats = 8;
+    song[2].beats = 2;
     song[3].note = E4;
-    song[3].beats = 8;
-    lastNote.note = C4;
-    lastNote.beats = 0;
+    song[3].beats = 2;
+    lastNote.note = song[0].note;
+    lastNote.beats = song[0].beats;
+    TC7 = lastNote.note;
 
     //Make the board
     board[0] = NOTE1;
@@ -274,6 +275,7 @@ void main(void) {
     score_test();
 #endif 
     EnableInterrupts;
+    TIE = 0x80;
     for(;;) {
 
     } /* loop forever */
@@ -309,7 +311,7 @@ interrupt 7 void RTI_ISR(void)
     }
 
     //Check if we need to update the note
-    if(rtiCnt >= (lastNote.beats * (814 / 2))){ 
+    if(rtiCnt >= (lastNote.beats * (293 / 2))){ 
         rtiCnt = 0;
         songPtr = (songPtr + 1) % SONG_SIZE;
         lastNote = song[songPtr];
