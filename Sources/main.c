@@ -541,6 +541,7 @@ void printscreen() {
       outchar(' ');  
     }
     outchar('\n');
+    outchar(13);
   }
 }
 
@@ -569,31 +570,23 @@ void updatescreen(int bits) {
     } else {
     screen[3] = ' ';
     }
-    clearScreen();
     printscreen();
-}
-
-void clearScreen() {
-    int i;
-    for(i = 0; i < 30; i++) {
-        outchar('\n');
-    }
 }
 
 void screen_test(void) {
     for(;;) {
-        updateScreen(NOTE1);
-        updateScreen(0);
-        updateScreen(NODE2);
-        updateScreen(0);
-        updateScreen(NOTE3);
-        updateScreen(0);
-        updateScreen(NOTE4);
-        updateScreen(0);
-        updateScreen(NOTE3);
-        updateScreen(0);
-        updateScreen(NODE2);
-        updateScreen(0);
+        update_screen(NOTE1);
+        update_screen(0);
+        update_screen(NOTE2);
+        update_screen(0);
+        update_screen(NOTE3);
+        update_screen(0);
+        update_screen(NOTE4);
+        update_screen(0);
+        update_screen(NOTE3);
+        update_screen(0);
+        update_screen(NOTE2);
+        update_screen(0);
     }
 }
 
