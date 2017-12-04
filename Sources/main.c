@@ -110,7 +110,9 @@ int highScore = 0;
 
 enum note{C3 = 459, C3s = 433, D3 = 409, D3s = 386, E3 = 364, F3 = 344, F3s = 324, G3 = 306,
           G3s = 289, A3 = 273, A3s = 258, B3 = 243, C4 = 229, C4s = 216, D4 = 204, D4s = 193,
-          E4 = 182, F4 = 172, F4s = 162, G4 = 153, G4s = 144, A4 = 136, A4s = 129, B4 = 121};
+          E4 = 182, F4 = 172, F4s = 162, G4 = 153, G4s = 144, A4 = 136, A4s = 129, B4 = 121,
+          C5 = 115, C5s = 108, D5 = 102, D5s = 96, E5 = 91, F5 = 86, F5s = 81, G5 = 77, G5s = 77,
+          A5 = 68};
 char runstp = 1;
 unsigned char input = 0;
 
@@ -242,14 +244,105 @@ void  initializations(void) {
 }
 
 void populate_song() {
-    song[0].note = C4;
+    int i;
+    //Bar 1
+    song[0].note = E5;
     song[0].beats = 2;
-    song[1].note = E4;
+    song[1].note = E5;
     song[1].beats = 2;
-    song[2].note = G4;
+    song[2].note =  0;
     song[2].beats = 2;
-    song[3].note = E4;
+    song[3].note = E5;
     song[3].beats = 2;
+    //Bar 2 
+    song[4].note = 0;
+    song[4].beats = 2;
+    song[5].note = C5;
+    song[5].beats = 2;
+    song[6].note =  E5;
+    song[6].beats = 2;
+    song[7].note = 0;
+    song[7].beats = 2;
+    //Bar 3 
+    song[8].note = G5;
+    song[8].beats = 2;
+    song[9].note = 0;
+    song[9].beats = 2;
+    song[10].note = 0;
+    song[10].beats = 4;
+    //Bar 4 
+    song[11].note = G4;
+    song[11].beats = 2;
+    song[12].note = 0;
+    song[12].beats = 2;
+    song[13].note = 0;
+    song[13].beats = 4;
+    //Bar 5 
+    song[14].note = C5;
+    song[14].beats = 2;
+    song[15].note = 0;
+    song[15].beats = 2;
+    song[16].note = 0;
+    song[16].beats = 2;
+    song[17].note = G4;
+    song[17].beats = 2;
+    //Bar 6
+    song[18].note = 0;
+    song[18].beats = 4;
+    song[19].note = E4;
+    song[19].beats = 2;
+    song[20].note = 0;
+    song[20].beats = 2;
+    //Bar 7
+    song[21].note = 0;
+    song[21].beats = 2;
+    song[22].note = A4;
+    song[22].beats = 2;
+    song[23].note = 0;
+    song[23].beats = 2;
+    song[24].note = B4;
+    song[24].beats = 2;
+    //Bar 8 
+    song[25].note = 0;
+    song[25].beats = 2;
+    song[26].note = A4s;
+    song[26].beats = 2;
+    song[27].note = A4;
+    song[27].beats = 2;
+    song[28].note = 0;
+    song[28].beats = 2;
+    //Bar 9  
+    song[29].note = G4;
+    song[29].beats = 6;
+    song[30].note = E5;
+    song[30].beats = 6;
+    song[31].note = G5;
+    song[31].beats = 6;
+    //Bar 10  
+    song[32].note = A5;
+    song[32].beats = 2;
+    song[33].note = 0;
+    song[33].beats = 2;
+    song[34].note = F5;
+    song[34].beats = 2;
+    song[35].note = G5;
+    song[35].beats = 2;
+    //Bar 11  
+    song[36].note = 0;
+    song[36].beats = 2;
+    song[37].note = E5;
+    song[37].beats = 2;
+    song[38].note = 0;
+    song[38].beats = 2;
+    song[39].note = C5;
+    song[39].beats = 2;
+    //Bar 12  
+    song[40].note = D5;
+    song[40].beats = 2;
+    song[41].note = B5;
+    song[41].beats = 2;
+    song[42].note = 0;
+    song[42].beats = 4;
     lastNote.note = song[0].note;
     lastNote.beats = song[0].beats;
     TC7 = lastNote.note;
@@ -279,6 +372,7 @@ void main(void) {
 #ifdef SCORE_TEST
     score_test();
 #endif 
+
     EnableInterrupts;
     TIE = 0x80;
     for(;;) {
@@ -316,7 +410,7 @@ interrupt 7 void RTI_ISR(void)
     }
 
     //Check if we need to update the note
-    if(rtiCnt >= (lastNote.beats * (293 / 2))){ 
+    if(rtiCnt >= (lastNote.beats * (293 / 4))){ 
         rtiCnt = 0;
         songPtr = (songPtr + 1) % SONG_SIZE;
         if(songPtr == 0) {
@@ -330,6 +424,8 @@ interrupt 7 void RTI_ISR(void)
             //Update score
             update_score(1);
             //Update screen
+            //TODO change this so it shows future inputs
+            update_screen(board[boardPtr]);
         }
         else {
             runstp = 0;
@@ -337,7 +433,11 @@ interrupt 7 void RTI_ISR(void)
         }
         boardPtr = (boardPtr + 1) % SONG_SIZE;
     }
-
+    else {
+        if(input) {
+            update_score(0);
+        }
+    }
     
 }
 
@@ -420,6 +520,11 @@ void score_test() {
 void update_score(int hit) {
     if(hit) {
         playerScore++;
+    }
+    else {
+        if(playerScore > 0) {
+            playerScore--;
+        }
     }
     if(playerScore > highScore) {
         highScore = playerScore;
@@ -545,7 +650,7 @@ void printscreen() {
   }
 }
 
-void updatescreen(int bits) {
+void update_screen(int bits) {
     int i = 0;
     for(i = 0; i < 28; i++) {
     screen[i+4] = screen[i];
