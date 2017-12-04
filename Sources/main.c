@@ -359,25 +359,25 @@ void push_test() {
 
 void display_buttons() {
     chgline(LINE1);
-    if(INPUT) {
+    if(INPUT1) {
         print_c('1');
     }
     else {
         print_c('0');
     }
-    if(INPUT) {
+    if(INPUT2) {
         print_c('1');
     }
     else {
         print_c('0');
     }
-    if(INPUT) {
+    if(INPUT3) {
         print_c('1');
     }
     else {
         print_c('0');
     }
-    if(INPUT) {
+    if(INPUT4) {
         print_c('1');
     }
     else {
