@@ -84,9 +84,10 @@ void screen_test(void);
 void score_test(void);
 void push_test(void);
 void sound_test(void);
+void welcome_screen(void);
 
-/* Score functions */
-void update_score(int);
+/* Display functions */
+void update_score(void);
 void display_score(void);
 void display_buttons(void);
 void update_screen(int);
@@ -97,7 +98,7 @@ void populate_song(void);
 
 /* Test function initilization here */
 //#define SCREEN_TEST
-//#define SCORE_TEST 1
+//#define SCORE_TEST 
 //#define PUSH_TEST
 
 
@@ -117,7 +118,8 @@ enum note{C3 = 459, C3s = 433, D3 = 409, D3s = 386, E3 = 364, F3 = 344, F3s = 32
           A5 = 68};
 char runstp = 1;
 unsigned char input = 0;
-unsigned char start = 0;
+unsigned char startFlg = 0;
+unsigned char welcome = 0;
 
 char screen[4] = {' '};
 char temp = ' ';
@@ -132,11 +134,13 @@ typedef struct Note {
 
 Note lastNote; //duration of the last note
 int rtiCnt = 0; //number of interrupts since last update
+int displayCnt = 0;
 int beatCount = 1;
 
 /*Array of Notes that represents the song */
 #define SONG_SIZE 43 
 Note song[SONG_SIZE];
+//Need to start at -1 so the first increment gets song[0]
 int songPtr = 0;
 
 /*Array of ints that represents the playboard */
@@ -144,8 +148,8 @@ int board[SONG_SIZE];
 int boardPtr = 0;
 
 /* Special ASCII characters */
-#define CR 0x0D		// ASCII return 
-#define LF 0x0A		// ASCII new line 
+#define CR 0x0D		// ASCII returnï¿½
+#define LF 0x0A		// ASCII new lineï¿½
 
 /* LCD COMMUNICATION BIT MASKS (note - different than previous labs) */
 #define LCDRS  PTT_PTT2		// RS pin mask (PTT[2])
@@ -354,9 +358,10 @@ void populate_song() {
     song[41].beats = 2;
     song[42].note = 0;
     song[42].beats = 4;
-    lastNote.note = song[0].note;
-    lastNote.beats = song[0].beats;
-    TC7 = lastNote.note;
+
+    lastNote.note = 0;
+    lastNote.beats = 39;
+    runstp = 0;
 
     //Make the board
     board[0] = NOTE3;
@@ -447,7 +452,7 @@ void main(void) {
 
 
 /*
-***********************************************************************                       
+***********************************************************************   ï¿½ï¿½ï¿½ï¿½  ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½   ï¿½ï¿½ 
  RTI interrupt service routine: RTI_ISR
 ************************************************************************
 */
@@ -456,7 +461,8 @@ interrupt 7 void RTI_ISR(void)
 {
     // clear RTI interrupt flagt 
     CRGFLG = CRGFLG | 0x80; 
-    rtiCnt++;
+
+    //Get the user input
     input = 0;
     if(INPUT1) {
         input = input ^ 0x80;
@@ -471,15 +477,26 @@ interrupt 7 void RTI_ISR(void)
         input = input ^ 0x10;
     }
 
+    if(!startFlg) {
+        //if(!welcome) {
+         //   welcome_screen();
+           // welcome = 1;
+        //}
+        if(input) {
+            startFlg = 1;
+            update_score();
+        }
+        return;
+    }
+
+    rtiCnt++;
+    displayCnt++;
     //Check if we need to update the note
     if(rtiCnt >= (lastNote.beats * (293 / 4))){ 
+
         rtiCnt = 0;
-        beatCount = 1;
-        //Get the next note
-        songPtr = (songPtr + 1) % SONG_SIZE;
-        if(songPtr == 0) {
-            playerScore = 0;
-        }
+            
+            
         lastNote = song[songPtr];
         if(lastNote.note != 0) {
           TC7 = lastNote.note;
@@ -487,22 +504,50 @@ interrupt 7 void RTI_ISR(void)
         } else {
             runstp = 0;
         }
-        if(board[boardPtr] & input) {
-            //Update score
-            update_score(1);
+        if(input & board[songPtr]) {
+          update_score();
         }
-        update_screen(board[boardPtr]);
-        boardPtr = (boardPtr + 1) % SONG_SIZE;
+          
+        //Get the next note
+        songPtr = (songPtr + 1) % SONG_SIZE;
+
+        //Check if it is the end of the game
+        if(songPtr == 0) {
+            playerScore = 0;
+            startFlg = 0;
+            welcome = 0;
+            boardPtr = 0;
+            rtiCnt = 0;
+            displayCnt = 0;
+            return;
+        }
+
     }
-    else if(rtiCnt >= (293 / 4) * beatCount) {
+
+    //Update screen every 1/8th note
+    if(displayCnt >= (293 / 4) * beatCount) {
         beatCount++;
-        update_screen(0);
+
+        if(boardPtr < SONG_SIZE) {
+          if(boardPtr == 0 || displayCnt >= (293 / 4) * song[boardPtr - 1].beats) {
+            beatCount = 1;
+            displayCnt = 0;
+            update_screen(board[boardPtr]);
+            boardPtr++;
+          } else {
+            update_screen(0);
+          }
+        } else {
+          displayCnt = 0;
+          beatCount = 1;
+          update_screen(0);
+        }
     }
     
 }
 
 /*
-***********************************************************************                       
+***********************************************************************   ï¿½ï¿½ï¿½ï¿½  ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½   ï¿½ï¿½ 
   TIM interrupt service routine	  		
 ***********************************************************************
 */
@@ -522,7 +567,7 @@ interrupt 15 void TIM_ISR(void)
 }
 
 /*
-***********************************************************************                       
+***********************************************************************
   Sound routines
 ***********************************************************************
 */
@@ -563,24 +608,22 @@ void display_buttons() {
     }
 }
 /*
-***********************************************************************                       
+***********************************************************************  
   Score routines
 ***********************************************************************
 */
 void score_test() {
     int i = 0;
     for(i = 1; i < 501; i++) {
-        update_score(i);
+        update_score();
     }
-    update_score(0);
+    update_score();
     for(i = 1; i < 510; i++) {
-        update_score(i);
+        update_score();
     }
 }
-void update_score(int hit) {
-    if(hit) {
-        playerScore++;
-    }
+void update_score() {
+    playerScore++;
     if(playerScore > highScore) {
         highScore = playerScore;
     }
@@ -588,35 +631,44 @@ void update_score(int hit) {
 }
 
 void display_score(void) {
+
     char thousands;
     char hundreds;
     char tens;
     char ones;
+
     thousands = playerScore / 1000;
     hundreds = (playerScore % 1000) / 100;
     tens = ((playerScore % 1000) % 100) / 10;
     ones = (((playerScore % 1000) % 100)) % 10;
+
     send_i(LCDCLR);
     chgline(LINE1);
     pmsglcd("Score: ");
+
     print_c(thousands + 48);
     print_c(hundreds + 48);
     print_c(tens + 48);
     print_c(ones + 48);
+
     chgline(LINE2);
     pmsglcd("High Score: ");
+    
     thousands = highScore / 1000;
     hundreds = (highScore % 1000) / 100;
     tens = ((highScore % 1000) % 100) / 10;
     ones = (((highScore % 1000) % 100)) % 10;
+    
     print_c(thousands + 48);
     print_c(hundreds + 48);
     print_c(tens + 48);
     print_c(ones + 48);
 }
 
+
+
 /*
-***********************************************************************                       
+***********************************************************************
   LCD Printing routines		 		  		
 ***********************************************************************
 */
@@ -686,62 +738,109 @@ void pmsglcd(char str[]) {
 }
 
 /*
-***********************************************************************                       
+***********************************************************************
   Terminal routines
 ***********************************************************************
 */
 void printscreen() {
   int j = 0;
+  int i = 0;
    for(j = 0; j < 4; j++ ) {
      temp = screen[j];
      if (temp == 'O') {
-      outchar(temp);
-      outchar(temp);
-      outchar(temp);
-      outchar(temp);
-      outchar(temp);
-      outchar(temp);
-      outchar(temp);
-      outchar(temp);
-      outchar(temp);
-      outchar(temp);
-      outchar(temp);
-      outchar(temp);
-      outchar(temp);
-      outchar(' ');
-      outchar(' ');
-      outchar(' ');
-      outchar(' ');
-      outchar(' ');
-      outchar(' ');  
-      outchar(' '); 
-      outchar(' '); 
+      for(i = 0; i < 3; i++) {
+        outchar(' ');
+      }
+      for(i = 0; i < 13; i++) {
+       outchar(temp); 
+      }
+      for(i = 0; i < 3; i++) {
+       outchar(' '); 
+      }
+      outchar('|'); 
     } else {
-      outchar(' ');
-      outchar(' ');
-      outchar(' ');
-      outchar(' ');
-      outchar(' ');
-      outchar(' ');
-      outchar(' ');
-      outchar(' ');
-      outchar(' ');
-      outchar(' ');
-      outchar(' ');
-      outchar(' ');
-      outchar(' ');
-      outchar(' ');
-      outchar(' ');
-      outchar(' ');
-      outchar(' ');
-      outchar(' ');
-      outchar(' ');  
-      outchar(' '); 
-      outchar(' ');      
+      for(i = 0; i < 3; i++) {
+        outchar(' ');
+      }
+      for(i = 0; i < 13; i++) {
+       outchar(temp); 
+      }
+      for(i = 0; i < 3; i++) {
+       outchar(' '); 
+      }
+      outchar('|');      
     }
   }
     outchar('\n');
     outchar(13);
+}
+
+void welcome_screen()
+{
+    //80 tall 40 wide
+    int j;
+    int i;
+    char welcomeTo[] = "Welcome to Guitar Hero Lite!"; 
+    char pressButton[] = "Press any button to start!";
+    int length;
+    for(j = 0; j<79; j++) //line 1
+        outchar('*');
+    outchar('\n');
+    outchar(13);
+    
+    i = 0;
+    for(j=0; j<20; j++)//line 2-19
+    {
+        outchar('*');
+        for(i = 0; i <77; i++) {
+          
+            outchar(' ');
+            outchar(13);
+        }
+        outchar('*');
+        outchar('\n');
+        outchar(13);
+    }
+    length = 28;
+    //line 20
+    outchar('*');
+    for(j=0; j<=26; j++)
+        outchar(' ');
+        outchar(13);
+
+    for(j=26; j<26+length; j++)
+        outchar(welcomeTo[j-26]);
+
+    for(j=26+length; j<77; j++)
+        outchar(' ');
+    outchar('*');
+    outchar('\n');
+    outchar(13);
+    
+    length = 27; 
+
+    for(j=0; j<=26; j++)
+        outchar(' ');
+
+    for(j=26; j<26+length; j++)
+        outchar(pressButton[j-26]);
+
+    for(j=26+length; j<77; j++)
+        outchar(' ');
+
+    outchar('*');
+    outchar('\n');
+    outchar(13);
+
+    for(j=22; j<80; j++)
+    {
+        outchar('*');
+        for(i = 0; i <77; i++)
+            outchar(' ');
+        outchar('*');
+        outchar('\n');
+        outchar(13);
+    }    
 }
 
 void update_screen(int bits) {
