@@ -88,6 +88,7 @@ void push_test(void);
 void update_score(int);
 void display_score(void);
 void display_buttons(void);
+void update_screen(int);
 
 /* Sound functions */
 void populate_song(void);
@@ -133,7 +134,7 @@ Note lastNote; //duration of the last note
 int rtiCnt = 0; //number of interrupts since last update
 
 /*Array of Notes that represents the song */
-#define SONG_SIZE 4 
+#define SONG_SIZE 43 
 Note song[SONG_SIZE];
 int songPtr = 0;
 
@@ -245,7 +246,6 @@ void  initializations(void) {
 }
 
 void populate_song() {
-    int i;
     //Bar 1
     song[0].note = E5;
     song[0].beats = 2;
@@ -340,7 +340,7 @@ void populate_song() {
     //Bar 12  
     song[40].note = D5;
     song[40].beats = 2;
-    song[41].note = B5;
+    song[41].note = B4;
     song[41].beats = 2;
     song[42].note = 0;
     song[42].beats = 4;
