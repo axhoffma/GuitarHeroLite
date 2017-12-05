@@ -139,7 +139,7 @@ Note song[SONG_SIZE];
 int songPtr = 0;
 
 /*Array of ints that represents the playboard */
-int board[4];
+int board[SONG_SIZE];
 int boardPtr = 0;
 
 /* Special ASCII characters */
@@ -375,7 +375,7 @@ void populate_song() {
 
     board[12] = NOTE0;
     board[13] = NOTE0;
-    board[14] = NOTE24
+    board[14] = NOTE24;
     board[15] = NOTE0;
 
     board[16] = NOTE0;
@@ -490,7 +490,7 @@ interrupt 7 void RTI_ISR(void)
             update_score(1);
         }
         update_screen(board[boardPtr]);
-        boardPtr = (boardPtr + 1) % 4;
+        boardPtr = (boardPtr + 1) % SONG_SIZE;
     }
     
 }
