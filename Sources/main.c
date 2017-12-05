@@ -98,7 +98,7 @@ void populate_song(void);
 
 /* Test function initilization here */
 //#define SCREEN_TEST
-//#define SCORE_TEST 1
+//#define SCORE_TEST 
 //#define PUSH_TEST
 
 
@@ -118,7 +118,8 @@ enum note{C3 = 459, C3s = 433, D3 = 409, D3s = 386, E3 = 364, F3 = 344, F3s = 32
           A5 = 68};
 char runstp = 1;
 unsigned char input = 0;
-unsigned char start = 0;
+unsigned char startFlg = 0;
+unsigned char welcome = 0;
 
 char screen[4] = {' '};
 char temp = ' ';
@@ -138,7 +139,8 @@ int beatCount = 1;
 /*Array of Notes that represents the song */
 #define SONG_SIZE 43 
 Note song[SONG_SIZE];
-int songPtr = 0;
+//Need to start at -1 so the first increment gets song[0]
+int songPtr = -1;
 
 /*Array of ints that represents the playboard */
 int board[SONG_SIZE];
@@ -355,9 +357,10 @@ void populate_song() {
     song[41].beats = 2;
     song[42].note = 0;
     song[42].beats = 4;
-    lastNote.note = song[0].note;
-    lastNote.beats = song[0].beats;
-    TC7 = lastNote.note;
+
+    lastNote.note = 0;
+    lastNote.beats = 39;
+    runstp = 0;
 
     //Make the board
     board[0] = NOTE3;
@@ -457,7 +460,6 @@ interrupt 7 void RTI_ISR(void)
 {
     // clear RTI interrupt flagt 
     CRGFLG = CRGFLG | 0x80; 
-    rtiCnt++;
 
     //Get the user input
     input = 0;
@@ -473,19 +475,43 @@ interrupt 7 void RTI_ISR(void)
     if(INPUT4) {
         input = input ^ 0x10;
     }
-    DisableInterrupts;
-    welcome_screen();
-    
 
+    if(!startFlg) {
+        if(!welcome) {
+            welcome_screen();
+            welcome = 1;
+        }
+        if(input) {
+            startFlg = 1;
+        }
+        return;
+    }
+
+    rtiCnt++;
     //Check if we need to update the note
     if(rtiCnt >= (lastNote.beats * (293 / 4))){ 
+
         rtiCnt = 0;
         beatCount = 1;
+
+        //Check if they hit the note
+        if(board[songPtr] & input) {
+            //Update score
+            update_score();
+        }
+
         //Get the next note
         songPtr = (songPtr + 1) % SONG_SIZE;
+
+        //Check if it is the end of the game
         if(songPtr == 0) {
             playerScore = 0;
+            startFlg = 0;
+            welcome = 0;
+            boardPtr = 0;
+            return;
         }
+
         lastNote = song[songPtr];
         if(lastNote.note != 0) {
           TC7 = lastNote.note;
@@ -493,18 +519,15 @@ interrupt 7 void RTI_ISR(void)
         } else {
             runstp = 0;
         }
-        if(board[boardPtr] & input) {
-            //Update score
-            update_score();
-        }
-        update_screen(board[boardPtr]);
-        boardPtr = (boardPtr + 1) % SONG_SIZE;
     }
 
     //Update screen every 1/8th note
     else if(rtiCnt >= (293 / 4) * beatCount) {
         beatCount++;
-        update_screen(0);
+    }
+    if(boardPtr < SONG_SIZE) {
+        update_screen(board[boardPtr]);
+        boardPtr++;
     }
     
 }
