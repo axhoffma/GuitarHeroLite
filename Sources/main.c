@@ -134,13 +134,14 @@ typedef struct Note {
 
 Note lastNote; //duration of the last note
 int rtiCnt = 0; //number of interrupts since last update
+int displayCnt = 0;
 int beatCount = 1;
 
 /*Array of Notes that represents the song */
 #define SONG_SIZE 43 
 Note song[SONG_SIZE];
 //Need to start at -1 so the first increment gets song[0]
-int songPtr = -1;
+int songPtr = 0;
 
 /*Array of ints that represents the playboard */
 int board[SONG_SIZE];
@@ -477,29 +478,36 @@ interrupt 7 void RTI_ISR(void)
     }
 
     if(!startFlg) {
-        if(!welcome) {
-            welcome_screen();
-            welcome = 1;
-        }
+        //if(!welcome) {
+         //   welcome_screen();
+           // welcome = 1;
+        //}
         if(input) {
             startFlg = 1;
+            update_score();
         }
         return;
     }
 
     rtiCnt++;
+    displayCnt++;
     //Check if we need to update the note
     if(rtiCnt >= (lastNote.beats * (293 / 4))){ 
 
         rtiCnt = 0;
-        beatCount = 1;
-
-        //Check if they hit the note
-        if(board[songPtr] & input) {
-            //Update score
-            update_score();
+            
+            
+        lastNote = song[songPtr];
+        if(lastNote.note != 0) {
+          TC7 = lastNote.note;
+          runstp = 1;
+        } else {
+            runstp = 0;
         }
-
+        if(input & board[songPtr]) {
+          update_score();
+        }
+          
         //Get the next note
         songPtr = (songPtr + 1) % SONG_SIZE;
 
@@ -509,25 +517,31 @@ interrupt 7 void RTI_ISR(void)
             startFlg = 0;
             welcome = 0;
             boardPtr = 0;
+            rtiCnt = 0;
+            displayCnt = 0;
             return;
         }
 
-        lastNote = song[songPtr];
-        if(lastNote.note != 0) {
-          TC7 = lastNote.note;
-          runstp = 1;
-        } else {
-            runstp = 0;
-        }
     }
 
     //Update screen every 1/8th note
-    else if(rtiCnt >= (293 / 4) * beatCount) {
+    if(displayCnt >= (293 / 4) * beatCount) {
         beatCount++;
-    }
-    if(boardPtr < SONG_SIZE) {
-        update_screen(board[boardPtr]);
-        boardPtr++;
+
+        if(boardPtr < SONG_SIZE) {
+          if(boardPtr == 0 || displayCnt >= (293 / 4) * song[boardPtr - 1].beats) {
+            beatCount = 1;
+            displayCnt = 0;
+            update_screen(board[boardPtr]);
+            boardPtr++;
+          } else {
+            update_screen(0);
+          }
+        } else {
+          displayCnt = 0;
+          beatCount = 1;
+          update_screen(0);
+        }
     }
     
 }
@@ -553,7 +567,7 @@ interrupt 15 void TIM_ISR(void)
 }
 
 /*
-***********************************************************************   ����  � ������   �� 
+***********************************************************************
   Sound routines
 ***********************************************************************
 */
