@@ -83,6 +83,7 @@ void pmsglcd(char[]);
 void screen_test(void);
 void score_test(void);
 void push_test(void);
+void sound_test(void);
 
 /* Score functions */
 void update_score(int);
@@ -116,6 +117,7 @@ enum note{C3 = 459, C3s = 433, D3 = 409, D3s = 386, E3 = 364, F3 = 344, F3s = 32
           A5 = 68};
 char runstp = 1;
 unsigned char input = 0;
+unsigned char start = 0;
 
 char screen[4] = {' '};
 char temp = ' ';
@@ -137,7 +139,7 @@ Note song[SONG_SIZE];
 int songPtr = 0;
 
 /*Array of ints that represents the playboard */
-int board[SONG_SIZE];
+int board[4];
 int boardPtr = 0;
 
 /* Special ASCII characters */
@@ -428,6 +430,9 @@ void main(void) {
 #ifdef SCORE_TEST
     score_test();
 #endif 
+#ifdef SOUND_TEST
+    sound_test();
+#endif
 
     EnableInterrupts;
     TIE = 0x80;
@@ -468,31 +473,24 @@ interrupt 7 void RTI_ISR(void)
     //Check if we need to update the note
     if(rtiCnt >= (lastNote.beats * (293 / 4))){ 
         rtiCnt = 0;
+        //Get the next note
         songPtr = (songPtr + 1) % SONG_SIZE;
         if(songPtr == 0) {
             playerScore = 0;
         }
         lastNote = song[songPtr];
+        if(lastNote.note != 0) {
+          TC7 = lastNote.note;
+          runstp = 1;
+        } else {
+            runstp = 0;
+        }
         if(board[boardPtr] & input) {
-            runstp = 1;
-            //Send new note to be outputted
-            TC7 = lastNote.note;
             //Update score
             update_score(1);
-            //Update screen
-            //TODO change this so it shows future inputs
-            update_screen(board[boardPtr]);
         }
-        else {
-            runstp = 0;
-            update_score(0);
-        }
-        boardPtr = (boardPtr + 1) % SONG_SIZE;
-    }
-    else {
-        if(input) {
-            update_score(0);
-        }
+        update_screen(board[boardPtr]);
+        boardPtr = (boardPtr + 1) % 4;
     }
     
 }
@@ -576,11 +574,6 @@ void score_test() {
 void update_score(int hit) {
     if(hit) {
         playerScore++;
-    }
-    else {
-        if(playerScore > 0) {
-            playerScore--;
-        }
     }
     if(playerScore > highScore) {
         highScore = playerScore;
