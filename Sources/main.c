@@ -143,8 +143,8 @@ int board[SONG_SIZE];
 int boardPtr = 0;
 
 /* Special ASCII characters */
-#define CR 0x0D		// ASCII return 
-#define LF 0x0A		// ASCII new line 
+#define CR 0x0D		// ASCII returnï¿½
+#define LF 0x0A		// ASCII new lineï¿½
 
 /* LCD COMMUNICATION BIT MASKS (note - different than previous labs) */
 #define LCDRS  PTT_PTT2		// RS pin mask (PTT[2])
@@ -446,7 +446,7 @@ void main(void) {
 
 
 /*
-***********************************************************************                       
+***********************************************************************   ï¿½ï¿½ï¿½ï¿½  ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½   ï¿½ï¿½ 
  RTI interrupt service routine: RTI_ISR
 ************************************************************************
 */
@@ -496,7 +496,7 @@ interrupt 7 void RTI_ISR(void)
 }
 
 /*
-***********************************************************************                       
+***********************************************************************   ï¿½ï¿½ï¿½ï¿½  ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½   ï¿½ï¿½ 
   TIM interrupt service routine	  		
 ***********************************************************************
 */
@@ -516,7 +516,7 @@ interrupt 15 void TIM_ISR(void)
 }
 
 /*
-***********************************************************************                       
+***********************************************************************   ï¿½ï¿½ï¿½ï¿½  ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½   ï¿½ï¿½ 
   Sound routines
 ***********************************************************************
 */
@@ -557,7 +557,7 @@ void display_buttons() {
     }
 }
 /*
-***********************************************************************                       
+***********************************************************************   ï¿½ï¿½ï¿½ï¿½  ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½   ï¿½ï¿½ 
   Score routines
 ***********************************************************************
 */
@@ -610,7 +610,7 @@ void display_score(void) {
 }
 
 /*
-***********************************************************************                       
+***********************************************************************   ï¿½ï¿½ï¿½ï¿½  ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½   ï¿½ï¿½ 
   LCD Printing routines		 		  		
 ***********************************************************************
 */
@@ -680,7 +680,7 @@ void pmsglcd(char str[]) {
 }
 
 /*
-***********************************************************************                       
+***********************************************************************   ï¿½ï¿½ï¿½ï¿½  ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½   ï¿½ï¿½ 
   Terminal routines
 ***********************************************************************
 */
@@ -736,6 +736,64 @@ void printscreen() {
   }
     outchar('\n');
     outchar(13);
+}
+
+void welcome_screen()
+{
+    //80 tall 40 wide
+    int j;
+    for(j = 0; j<79; j++) //line 1
+        outchar('*');
+    outchar('\n');
+    
+    int i = 0;
+    for(j=0; j<20; j++)//line 2-19
+    {
+        outchar('*');
+        for(i = 0; i <77; i++)
+            outchar('');
+        outchar('*');
+        outchar('\n');
+    }
+    char welcomeTo[] = "Welcome to Guitar Hero Lite!";
+    int length = strlen(welcomeTo) + 1;
+    //line 20
+    outchar('*');
+    for(j=0; j<=26; j++)
+        outchar(' ');
+
+    for(j=26; j<26+length; j++)
+        outchar(welcomeTo);
+
+    for(j=26+length; j<77; j++)
+        outchar(' ');
+    outchar('*');
+    outchar('\n');
+    
+    //line 21
+    char pressButton[] = "Press any button to start!";
+    length = strlen(pressButton);
+
+    for(j=0; j<=26; j++)
+        outchar(' ');
+
+    for(j=26; j<26+length; j++)
+        outchar(pressButton);
+
+    for(j=26+length; j<77; j++)
+        outchar(' ');
+
+    outchar('*');
+    outchar('\n');
+
+    for(j=22; j<80; j++)
+    {
+        outchar('*');
+        for(i = 0; i <77; i++)
+            outchar('');
+        outchar('*');
+        outchar('\n');
+    }    
 }
 
 void update_screen(int bits) {
