@@ -84,6 +84,7 @@ void screen_test(void);
 void score_test(void);
 void push_test(void);
 void sound_test(void);
+void welcome_screen(void);
 
 /* Score functions */
 void update_score(int);
@@ -470,6 +471,9 @@ interrupt 7 void RTI_ISR(void)
     if(INPUT4) {
         input = input ^ 0x10;
     }
+    DisableInterrupts;
+    welcome_screen();
+    
 
     //Check if we need to update the note
     if(rtiCnt >= (lastNote.beats * (293 / 4))){ 
@@ -616,7 +620,7 @@ void display_score(void) {
 }
 
 /*
-***********************************************************************   ����  � ������   �� 
+***********************************************************************
   LCD Printing routines		 		  		
 ***********************************************************************
 */
@@ -686,7 +690,7 @@ void pmsglcd(char str[]) {
 }
 
 /*
-***********************************************************************   ����  � ������   �� 
+***********************************************************************
   Terminal routines
 ***********************************************************************
 */
@@ -727,57 +731,67 @@ void welcome_screen()
 {
     //80 tall 40 wide
     int j;
+    int i;
+    char welcomeTo[] = "Welcome to Guitar Hero Lite!"; 
+    char pressButton[] = "Press any button to start!";
+    int length;
     for(j = 0; j<79; j++) //line 1
         outchar('*');
     outchar('\n');
+    outchar(13);
     
-    int i = 0;
+    i = 0;
     for(j=0; j<20; j++)//line 2-19
     {
         outchar('*');
-        for(i = 0; i <77; i++)
-            outchar('');
+        for(i = 0; i <77; i++) {
+          
+            outchar(' ');
+            outchar(13);
+        }
         outchar('*');
         outchar('\n');
+        outchar(13);
     }
-    char welcomeTo[] = "Welcome to Guitar Hero Lite!";
-    int length = strlen(welcomeTo) + 1;
+    length = 28;
     //line 20
     outchar('*');
     for(j=0; j<=26; j++)
         outchar(' ');
+        outchar(13);
 
     for(j=26; j<26+length; j++)
-        outchar(welcomeTo);
+        outchar(welcomeTo[j-26]);
 
     for(j=26+length; j<77; j++)
         outchar(' ');
     outchar('*');
     outchar('\n');
+    outchar(13);
     
-    //line 21
-    char pressButton[] = "Press any button to start!";
-    length = strlen(pressButton);
+    length = 27; 
 
     for(j=0; j<=26; j++)
         outchar(' ');
 
     for(j=26; j<26+length; j++)
-        outchar(pressButton);
+        outchar(pressButton[j-26]);
 
     for(j=26+length; j<77; j++)
         outchar(' ');
 
     outchar('*');
     outchar('\n');
+    outchar(13);
 
     for(j=22; j<80; j++)
     {
         outchar('*');
         for(i = 0; i <77; i++)
-            outchar('');
+            outchar(' ');
         outchar('*');
         outchar('\n');
+        outchar(13);
     }    
 }
 
