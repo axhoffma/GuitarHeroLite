@@ -119,9 +119,7 @@ unsigned char input = 0;
 
 char screen[4] = {' '};
 char temp = ' ';
-int songbuttons[42] = {2,2,0,2,0,4,2,0,1,0,0,8,0,0,5,0,0,10,0,12,0,0,4,0,2,0,4,8,0,2,1,2,1,0,8,8,0,4,0,12,6,10};
-
-
+int songbuttons[42] = {2,2,0,2, 0,4,2,0, 1,0,0,8, 0,0,5,0, 0,0,0,2, 0,0,4,0, 2,0,4,8, 0,2,1,2, 1,0,8,8, 0,4,0,2, 6,0};
 
 /* Structure to represent a musical note */
 typedef struct Note {
@@ -166,11 +164,20 @@ int boardPtr = 0;
 #define INPUT3 PTAD_PTAD2
 #define INPUT4 PTAD_PTAD3
 
-
+#define NOTE0 0x00
 #define NOTE1 0x80
 #define NOTE2 0x40
 #define NOTE3 0x20
 #define NOTE4 0x10
+
+#define NOTE12 0xB0
+#define NOTE13 0xA0
+#define NOTE14 0x90
+
+#define NOTE23 0x60
+#define NOTE24 0x50
+
+#define NOTE34 0x30
 
 
 	 	   		
@@ -349,10 +356,58 @@ void populate_song() {
     TC7 = lastNote.note;
 
     //Make the board
-    board[0] = NOTE1;
+    board[0] = NOTE3;
     board[1] = NOTE3;
-    board[2] = NOTE4;
+    board[2] = NOTE0;
     board[3] = NOTE3;
+
+    board[4] = NOTE0;
+    board[5] = NOTE2;
+    board[6] = NOTE3;
+    board[7] = NOTE0;
+
+    board[8] = NOTE4;
+    board[9] = NOTE0;
+    board[10] = NOTE0;
+    board[11] = NOTE1;
+
+    board[12] = NOTE0;
+    board[13] = NOTE0;
+    board[14] = NOTE24
+    board[15] = NOTE0;
+
+    board[16] = NOTE0;
+    board[17] = NOTE0;
+    board[18] = NOTE0;
+    board[19] = NOTE3;
+
+    board[20] = NOTE0;
+    board[21] = NOTE0;
+    board[22] = NOTE2;
+    board[23] = NOTE0;
+
+    board[24] = NOTE3;//2
+    board[25] = NOTE0;//0
+    board[26] = NOTE2;//4
+    board[27] = NOTE1;//8
+
+    board[28] = NOTE0;
+    board[29] = NOTE3;
+    board[30] = NOTE4;
+    board[31] = NOTE3;
+
+    board[32] = NOTE4;
+    board[33] = NOTE0;
+    board[34] = NOTE1;
+    board[35] = NOTE1;
+
+    board[36] = NOTE0;
+    board[37] = NOTE2;
+    board[38] = NOTE0;
+    board[39] = NOTE3;
+
+    board[40] = NOTE23;
+    board[41] = NOTE0;
 }
 	 		  			 		  		
 /*	 		  			 		  		
