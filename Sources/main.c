@@ -692,52 +692,31 @@ void pmsglcd(char str[]) {
 */
 void printscreen() {
   int j = 0;
+  int i = 0;
    for(j = 0; j < 4; j++ ) {
      temp = screen[j];
      if (temp == 'O') {
-      outchar(temp);
-      outchar(temp);
-      outchar(temp);
-      outchar(temp);
-      outchar(temp);
-      outchar(temp);
-      outchar(temp);
-      outchar(temp);
-      outchar(temp);
-      outchar(temp);
-      outchar(temp);
-      outchar(temp);
-      outchar(temp);
-      outchar(' ');
-      outchar(' ');
-      outchar(' ');
-      outchar(' ');
-      outchar(' ');
-      outchar(' ');  
-      outchar(' '); 
-      outchar(' '); 
+      for(i = 0; i < 3; i++) {
+        outchar(' ');
+      }
+      for(i = 0; i < 13; i++) {
+       outchar(temp); 
+      }
+      for(i = 0; i < 3; i++) {
+       outchar(' '); 
+      }
+      outchar('|'); 
     } else {
-      outchar(' ');
-      outchar(' ');
-      outchar(' ');
-      outchar(' ');
-      outchar(' ');
-      outchar(' ');
-      outchar(' ');
-      outchar(' ');
-      outchar(' ');
-      outchar(' ');
-      outchar(' ');
-      outchar(' ');
-      outchar(' ');
-      outchar(' ');
-      outchar(' ');
-      outchar(' ');
-      outchar(' ');
-      outchar(' ');
-      outchar(' ');  
-      outchar(' '); 
-      outchar(' ');      
+      for(i = 0; i < 3; i++) {
+        outchar(' ');
+      }
+      for(i = 0; i < 13; i++) {
+       outchar(temp); 
+      }
+      for(i = 0; i < 3; i++) {
+       outchar(' '); 
+      }
+      outchar('|');      
     }
   }
     outchar('\n');
