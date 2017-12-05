@@ -132,6 +132,7 @@ typedef struct Note {
 
 Note lastNote; //duration of the last note
 int rtiCnt = 0; //number of interrupts since last update
+int beatCount = 1;
 
 /*Array of Notes that represents the song */
 #define SONG_SIZE 43 
@@ -473,6 +474,7 @@ interrupt 7 void RTI_ISR(void)
     //Check if we need to update the note
     if(rtiCnt >= (lastNote.beats * (293 / 4))){ 
         rtiCnt = 0;
+        beatCount = 1;
         //Get the next note
         songPtr = (songPtr + 1) % SONG_SIZE;
         if(songPtr == 0) {
@@ -491,6 +493,10 @@ interrupt 7 void RTI_ISR(void)
         }
         update_screen(board[boardPtr]);
         boardPtr = (boardPtr + 1) % SONG_SIZE;
+    }
+    else if(rtiCnt >= (293 / 4) * beatCount) {
+        beatCount++;
+        update_screen(0);
     }
     
 }
