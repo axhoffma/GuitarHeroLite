@@ -85,8 +85,8 @@ void score_test(void);
 void push_test(void);
 void sound_test(void);
 
-/* Score functions */
-void update_score(int);
+/* Display functions */
+void update_score(void);
 void display_score(void);
 void display_buttons(void);
 void update_screen(int);
@@ -457,6 +457,8 @@ interrupt 7 void RTI_ISR(void)
     // clear RTI interrupt flagt 
     CRGFLG = CRGFLG | 0x80; 
     rtiCnt++;
+
+    //Get the user input
     input = 0;
     if(INPUT1) {
         input = input ^ 0x80;
@@ -489,11 +491,13 @@ interrupt 7 void RTI_ISR(void)
         }
         if(board[boardPtr] & input) {
             //Update score
-            update_score(1);
+            update_score();
         }
         update_screen(board[boardPtr]);
         boardPtr = (boardPtr + 1) % SONG_SIZE;
     }
+
+    //Update screen every 1/8th note
     else if(rtiCnt >= (293 / 4) * beatCount) {
         beatCount++;
         update_screen(0);
@@ -563,24 +567,22 @@ void display_buttons() {
     }
 }
 /*
-***********************************************************************   ����  � ������   �� 
+***********************************************************************  
   Score routines
 ***********************************************************************
 */
 void score_test() {
     int i = 0;
     for(i = 1; i < 501; i++) {
-        update_score(i);
+        update_score();
     }
-    update_score(0);
+    update_score();
     for(i = 1; i < 510; i++) {
-        update_score(i);
+        update_score();
     }
 }
-void update_score(int hit) {
-    if(hit) {
-        playerScore++;
-    }
+void update_score() {
+    playerScore++;
     if(playerScore > highScore) {
         highScore = playerScore;
     }
@@ -588,32 +590,41 @@ void update_score(int hit) {
 }
 
 void display_score(void) {
+
     char thousands;
     char hundreds;
     char tens;
     char ones;
+
     thousands = playerScore / 1000;
     hundreds = (playerScore % 1000) / 100;
     tens = ((playerScore % 1000) % 100) / 10;
     ones = (((playerScore % 1000) % 100)) % 10;
+
     send_i(LCDCLR);
     chgline(LINE1);
     pmsglcd("Score: ");
+
     print_c(thousands + 48);
     print_c(hundreds + 48);
     print_c(tens + 48);
     print_c(ones + 48);
+
     chgline(LINE2);
     pmsglcd("High Score: ");
+    
     thousands = highScore / 1000;
     hundreds = (highScore % 1000) / 100;
     tens = ((highScore % 1000) % 100) / 10;
     ones = (((highScore % 1000) % 100)) % 10;
+    
     print_c(thousands + 48);
     print_c(hundreds + 48);
     print_c(tens + 48);
     print_c(ones + 48);
 }
+
+
 
 /*
 ***********************************************************************   ����  � ������   �� 
