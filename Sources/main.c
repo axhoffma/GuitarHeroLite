@@ -1086,7 +1086,7 @@ void populate_song() {
     board[15] = NOTE0;
 
     board[16] = NOTE0;
-    board[17] = NOTE0;
+    board[17] = NOTE3;
     board[18] = NOTE0;
     board[19] = NOTE3;
 
@@ -1118,107 +1118,107 @@ void populate_song() {
     board[40] = NOTE23;
     board[41] = NOTE0;
     board[42] = NOTE3;
+    
     board[43] = NOTE3;
     board[44] = NOTE0;
-    board[45] = NOTE3;
+    board[45] = NOTE0;
 
-    board[46] = NOTE0;
-    board[47] = NOTE2;
-    board[48] = NOTE3;
+    board[46] = NOTE2;
+    board[47] = NOTE0;
+    board[48] = NOTE1;
     board[49] = NOTE0;
 
-    board[50] = NOTE4;
-    board[51] = NOTE0;
+    board[50] = NOTE0;
+    board[51] = NOTE2;
     board[52] = NOTE0;
-    board[53] = NOTE1;
+    board[53] = NOTE3;
 
-    board[53] = NOTE0;
     board[54] = NOTE0;
-    board[55] = NOTE24;
-    board[56] = NOTE0;
+    board[55] = NOTE23;
+    board[56] = NOTE12;
 
     board[57] = NOTE0;
-    board[58] = NOTE0;
-    board[59] = NOTE0;
-    board[60] = NOTE3;
+    board[58] = NOTE12;
+    board[59] = NOTE13;
+    board[60] = NOTE14;
 
-    board[61] = NOTE0;
+    board[61] = NOTE4;
     board[62] = NOTE0;
-    board[63] = NOTE2;
-    board[64] = NOTE0;
+    board[63] = NOTE3;
+    board[64] = NOTE4;
 
-    board[65] = NOTE3;//2
-    board[66] = NOTE0;//0
-    board[67] = NOTE2;//4
+    board[65] = NOTE0;//2
+    board[66] = NOTE3;//0
+    board[67] = NOTE0;//4
     board[68] = NOTE1;//8
 
-    board[69] = NOTE0;
-    board[70] = NOTE3;
-    board[71] = NOTE4;
-    board[72] = NOTE3;
+    board[69] = NOTE2;
+    board[70] = NOTE1;
+    board[71] = NOTE0;
+    board[72] = NOTE0;
 
-    board[73] = NOTE4;
-    board[74] = NOTE0;
-    board[75] = NOTE1;
-    board[76] = NOTE1;
+    board[73] = NOTE1;
+    board[74] = NOTE3;
+    board[75] = NOTE2;
+    board[76] = NOTE4;
 
     board[77] = NOTE0;
-    board[78] = NOTE2;
+    board[78] = NOTE1;
     board[79] = NOTE0;
     board[80] = NOTE3;
 
-    board[81] = NOTE23;
-    board[82] = NOTE0;
+    board[81] = NOTE2;
+    board[82] = NOTE1;
 
-    board[83] = NOTE23;
-    board[84] = NOTE0;
-    board[85] = NOTE3;
-    board[86] = NOTE3;
+    board[83] = NOTE0;
+    board[84] = NOTE14;
+    board[85] = NOTE13;
+    board[86] = NOTE12;
     board[87] = NOTE0;
-    board[88] = NOTE3;
+    board[88] = NOTE1;
 
-    board[89] = NOTE0;
+    board[89] = NOTE3;
     board[90] = NOTE2;
-    board[91] = NOTE3;
+    board[91] = NOTE4;
     board[92] = NOTE0;
 
-    board[93] = NOTE4;
+    board[93] = NOTE1;
     board[94] = NOTE0;
-    board[95] = NOTE0;
-    board[96] = NOTE1;
+    board[95] = NOTE24;
+    board[96] = NOTE0;
 
-    board[97] = NOTE0;
-    board[98] = NOTE0;
-    board[99] = NOTE24;
+    board[97] = NOTE24;
+    board[98] = NOTE24;
+    board[99] = NOTE0;
     board[100] = NOTE0;
 
     board[101] = NOTE0;
-    board[102] = NOTE0;
-    board[103] = NOTE0;
-    board[104] = NOTE3;
+    board[102] = NOTE1;
+    board[103] = NOTE3;
+    board[104] = NOTE2;
 
-    board[105] = NOTE0;
+    board[105] = NOTE4;
     board[106] = NOTE0;
-    board[107] = NOTE2;
+    board[107] = NOTE1;
     board[108] = NOTE0;
 
     board[109] = NOTE3;//2
-    board[110] = NOTE0;//0
-    board[111] = NOTE2;//4
-    board[112] = NOTE1;//8
+    board[110] = NOTE2;//0
+    board[111] = NOTE1;//4
+    board[112] = NOTE0;//8
 
-    board[113] = NOTE0;
-    board[114] = NOTE3;
-    board[115] = NOTE4;
-    board[116] = NOTE3;
+    board[113] = NOTE14;
+    board[114] = NOTE13;
+    board[115] = NOTE12;
+    board[116] = NOTE0;
 
     board[117] = NOTE4;
     board[118] = NOTE0;
-    board[119] = NOTE1;
-    board[120] = NOTE1;
+    board[119] = NOTE0;
+    board[120] = NOTE3;
 
     board[121] = NOTE0;
-    board[122] = NOTE2;
+    board[122] = NOTE1;
     board[123] = NOTE0;
-    board[124] = NOTE3;
+    board[124] = NOTE0;
 }
