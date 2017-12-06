@@ -152,7 +152,7 @@ int boardPtr = 0;
 #define LF 0x0A		// ASCII new line�
 
 /* LCD COMMUNICATION BIT MASKS (note - different than previous labs) */
-#define LCDRS  PTT_PTT2		// RS pin mask (PTT[2])
+#define LCDRS  PTT_PTT5		// RS pin mask (PTT[2])
 #define LCDRW  PTT_PTT3		// R/W pin mask (PTT[3])
 #define LCDCLK PTT_PTT4 	// LCD EN/CLK pin mask (PTT[4])
 
@@ -225,14 +225,16 @@ void  initializations(void) {
   CRGINT = 0x80;
 
 /* Initialize the PWM unit*/
-  MODRR = 0x02; //set PT1 to output PWM signal
-  PWME = 0x02;  //enable PWM Channel 1
-  PWMPOL = 0x02; //set PWM Channel 1 to active high polarity
+  MODRR = 0x06; //set PT2 & PT1 to output PWM signal
+  PWME = 0x06;  //enable PWM Channel 1&2
+  PWMPOL = 0x06; //set PWM Channel 1&2 to active high polarity
   PWMCTL = 0; //no concantenation 
   PWMCAE = 0; //no center align 
+  PWMPER2 = 0xFF; //set max period for channel 2
+  PWMDTY2 = 0; //set no duty cycle to start
   PWMPER1 = 0xFF; //set max period for channel 1
   PWMDTY1 = 0; //set no duty cycle to start
-  PWMCLK = 0; //select clock A for channel 1
+  PWMCLK = 0; //select clock B for channel 2 and clock A for channel 1
   PWMPRCLK = 0; //set clock to 24 MHz
     
 /* Initialize TIM CH7 for periodic interrupts every ms */
@@ -244,7 +246,7 @@ void  initializations(void) {
   TC7 = 229; //interrupts set up to fire an interrupt rate of 52,400 Hz for middle C
 
 /* Initialize LED screen */
-  DDRT = 0x1C;
+  DDRT = 0xFF;
   PTT_PTT4  = 1; 
   PTT_PTT3  = 0;
   send_i(LCDON);
@@ -328,11 +330,11 @@ void populate_song() {
     song[28].beats = 2;
     //Bar 9  
     song[29].note = G4;
-    song[29].beats = 6;
+    song[29].beats = 4;
     song[30].note = E5;
-    song[30].beats = 6;
+    song[30].beats = 4;
     song[31].note = G5;
-    song[31].beats = 6;
+    song[31].beats = 4;
     //Bar 10  
     song[32].note = A5;
     song[32].beats = 2;
@@ -478,10 +480,10 @@ interrupt 7 void RTI_ISR(void)
     }
 
     if(!startFlg) {
-        //if(!welcome) {
-         //   welcome_screen();
-           // welcome = 1;
-        //}
+        if(!welcome) {
+           welcome_screen();
+            welcome = 1;
+        }
         if(input) {
             startFlg = 1;
             update_score();
@@ -492,7 +494,7 @@ interrupt 7 void RTI_ISR(void)
     rtiCnt++;
     displayCnt++;
     //Check if we need to update the note
-    if(rtiCnt >= (lastNote.beats * (293 / 4))){ 
+    if(rtiCnt >= (lastNote.beats * (293 / 12))){ 
 
         rtiCnt = 0;
             
@@ -519,17 +521,19 @@ interrupt 7 void RTI_ISR(void)
             boardPtr = 0;
             rtiCnt = 0;
             displayCnt = 0;
+            lastNote.beats = 39;
+            lastNote.note = 0;
             return;
         }
 
     }
 
     //Update screen every 1/8th note
-    if(displayCnt >= (293 / 4) * beatCount) {
+    if(displayCnt >= (293 / 12) * beatCount) {
         beatCount++;
 
         if(boardPtr < SONG_SIZE) {
-          if(boardPtr == 0 || displayCnt >= (293 / 4) * song[boardPtr - 1].beats) {
+          if(boardPtr == 0 || displayCnt >= (293 / 12) * song[boardPtr - 1].beats) {
             beatCount = 1;
             displayCnt = 0;
             update_screen(board[boardPtr]);
@@ -560,10 +564,14 @@ interrupt 15 void TIM_ISR(void)
     //261.6 Hz sinewave using a 52,320 Hz interrupt rate | closer to a 
     //262 Hz wave 
     if(runstp){
+        PWMDTY2 = sineArray[sineptr];
         PWMDTY1 = sineArray[sineptr];
         sineptr = (sineptr + 1) % 200;
     }
-    else{ PWMDTY1 = 0;}
+    else{ 
+      PWMDTY2 = 0;
+      PWMDTY1 = 0;
+    }
 }
 
 /*
@@ -715,7 +723,7 @@ void send_byte(char byte) {
 }
 
 void send_i(char instruction) {
-    PTT_PTT2 = 0;
+    PTT_PTT5 = 0;
     send_byte(instruction);
 }
 
@@ -725,7 +733,7 @@ void chgline(char line) {
 }
 
 void print_c(char character) {
-    PTT_PTT2 = 1;
+    PTT_PTT5 = 1;
     send_byte(character);
 }
 
@@ -777,10 +785,10 @@ void printscreen() {
 
 void welcome_screen()
 {
-    //80 tall 40 wide
+    //80 wide 40 tall
     int j;
     int i;
-    char welcomeTo[] = "Welcome to Guitar Hero Lite!"; 
+    char welcomeTo[] = "Welcome to ASCII Hero Lite! "; 
     char pressButton[] = "Press any button to start!";
     int length;
     for(j = 0; j<79; j++) //line 1
@@ -789,13 +797,12 @@ void welcome_screen()
     outchar(13);
     
     i = 0;
-    for(j=0; j<20; j++)//line 2-19
+    for(j=0; j<19; j++)//line 2-19
     {
         outchar('*');
         for(i = 0; i <77; i++) {
           
             outchar(' ');
-            outchar(13);
         }
         outchar('*');
         outchar('\n');
@@ -806,19 +813,18 @@ void welcome_screen()
     outchar('*');
     for(j=0; j<=26; j++)
         outchar(' ');
-        outchar(13);
-
+        
     for(j=26; j<26+length; j++)
         outchar(welcomeTo[j-26]);
 
-    for(j=26+length; j<77; j++)
+    for(j=26+length; j<76; j++)
         outchar(' ');
     outchar('*');
     outchar('\n');
     outchar(13);
     
     length = 27; 
-
+    outchar('*');
     for(j=0; j<=26; j++)
         outchar(' ');
 
@@ -832,7 +838,7 @@ void welcome_screen()
     outchar('\n');
     outchar(13);
 
-    for(j=22; j<80; j++)
+    for(j=22; j<39; j++)
     {
         outchar('*');
         for(i = 0; i <77; i++)
@@ -841,6 +847,11 @@ void welcome_screen()
         outchar('\n');
         outchar(13);
     }    
+    
+    for(j = 0; j<79; j++) //line 1
+        outchar('*');
+    outchar('\n');
+    outchar(13);
 }
 
 void update_screen(int bits) {
