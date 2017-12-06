@@ -119,7 +119,7 @@ enum note{C3 = 459, C3s = 433, D3 = 409, D3s = 386, E3 = 364, F3 = 344, F3s = 32
           G3s = 289, A3 = 273, A3s = 258, B3 = 243, C4 = 229, C4s = 216, D4 = 204, D4s = 193,
           E4 = 182, F4 = 172, F4s = 162, G4 = 153, G4s = 144, A4 = 136, A4s = 129, B4 = 121,
           C5 = 115, C5s = 108, D5 = 102, D5s = 96, E5 = 91, F5 = 86, F5s = 81, G5 = 77, G5s = 77,
-          A5 = 68};
+          A5 = 68, C6 = 57};
 char runstp = 1;
 unsigned char input = 0;
 unsigned char startFlg = 0;
@@ -340,7 +340,7 @@ interrupt 7 void RTI_ISR(void)
     rtiCnt++;
     displayCnt++;
     //Check if we need to update the note
-    if(rtiCnt >= (lastNote.beats * (293 / 12))){ 
+    if(rtiCnt >= (lastNote.beats * (293 / 25))){ 
 
         rtiCnt = 0;
             
@@ -375,11 +375,11 @@ interrupt 7 void RTI_ISR(void)
     }
 
     //Update screen every 1/8th note
-    if(displayCnt >= (293 / 12) * beatCount) {
+    if(displayCnt >= (293 / 25) * beatCount) {
         beatCount++;
 
         if(boardPtr < SONG_SIZE) {
-          if(boardPtr == 0 || displayCnt >= (293 / 12) * song[boardPtr - 1].beats) {
+          if(boardPtr == 0 || displayCnt >= (293 / 25) * song[boardPtr - 1].beats) {
             beatCount = 1;
             displayCnt = 0;
             update_screen(board[boardPtr]);
@@ -892,19 +892,19 @@ void populate_song() {
     song[50].note = 0;
     song[50].beats = 2;
     song[51].note = A4;
-    song[51].note = 2;
+    song[51].beats = 2;
     song[52].note = 0;
     song[52].beats = 2;
-    song[53].beats = B4;
+    song[53].note = B4;
     song[53].beats = 2;
     //Bar 16
     song[54].note = 0;
     song[54].beats = 2;
     song[55].note = A4s;
-    song[55].note = 2;
+    song[55].beats = 2;
     song[56].note = A4;
     song[56].beats = 2;
-    song[57].beats = 0;
+    song[57].note = 0;
     song[57].beats = 2;
     //Bar 17
     song[58].note = song[29].note;
@@ -1007,37 +1007,37 @@ void populate_song() {
     //Bar 29 
     song[101].note = song[72].note;
     song[101].beats = song[72].beats;
-    song[102].note = songs[73].note;
-    song[102].beats = songs[73].beats;
-    song[103].note = songs[74].note;
-    song[103].beats = songs[74].beats;
+    song[102].note = song[73].note;
+    song[102].beats = song[73].beats;
+    song[103].note = song[74].note;
+    song[103].beats = song[74].beats;
     //Bar 30 
     song[104].note = song[75].note;
     song[104].beats = song[75].beats;
-    song[105].note = songs[76].note;
-    song[105].beats = songs[76].beats;
-    song[106].note = songs[77].note;
-    song[106].beats = songs[77].beats;
-    song[107].note = songs[78].note;
-    song[107].beats = songs[78].beats;
+    song[105].note = song[76].note;
+    song[105].beats = song[76].beats;
+    song[106].note = song[77].note;
+    song[106].beats = song[77].beats;
+    song[107].note = song[78].note;
+    song[107].beats = song[78].beats;
     //Bar 31 
     song[108].note = song[79].note;
     song[108].beats = song[79].beats;
-    song[109].note = songs[80].note;
-    song[109].beats = songs[80].beats;
-    song[110].note = songs[81].note;
-    song[110].beats = songs[81].beats;
-    song[111].note = songs[82].note;
-    song[111].beats = songs[82].beats;
+    song[109].note = song[80].note;
+    song[109].beats = song[80].beats;
+    song[110].note = song[81].note;
+    song[110].beats = song[81].beats;
+    song[111].note = song[82].note;
+    song[111].beats = song[82].beats;
     //Bar 31 
     song[112].note = song[83].note;
     song[112].beats = song[83].beats;
-    song[113].note = songs[84].note;
-    song[113].beats = songs[84].beats;
-    song[114].note = songs[85].note;
-    song[114].beats = songs[85].beats;
-    song[115].note = songs[86].note;
-    song[115].beats = songs[86].beats;
+    song[113].note = song[84].note;
+    song[113].beats = song[84].beats;
+    song[114].note = song[85].note;
+    song[114].beats = song[85].beats;
+    song[115].note = song[86].note;
+    song[115].beats = song[86].beats;
     //Bar 32 
     song[116].note = 0;
     song[116].beats = 4;
