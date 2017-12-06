@@ -265,351 +265,6 @@ void  initializations(void) {
 	      
 }
 
-void populate_song() {
-    //Bar 1
-    song[0].note = E5;
-    song[0].beats = 2;
-    song[1].note = E5;
-    song[1].beats = 2;
-    song[2].note =  0;
-    song[2].beats = 2;
-    song[3].note = E5;
-    song[3].beats = 2;
-    //Bar 2 
-    song[4].note = 0;
-    song[4].beats = 2;
-    song[5].note = C5;
-    song[5].beats = 2;
-    song[6].note =  E5;
-    song[6].beats = 2;
-    song[7].note = 0;
-    song[7].beats = 2;
-    //Bar 3 
-    song[8].note = G5;
-    song[8].beats = 2;
-    song[9].note = 0;
-    song[9].beats = 2;
-    song[10].note = 0;
-    song[10].beats = 4;
-    //Bar 4 
-    song[11].note = G4;
-    song[11].beats = 2;
-    song[12].note = 0;
-    song[12].beats = 2;
-    song[13].note = 0;
-    song[13].beats = 4;
-    //Bar 5 
-    song[14].note = C5;
-    song[14].beats = 2;
-    song[15].note = 0;
-    song[15].beats = 2;
-    song[16].note = 0;
-    song[16].beats = 2;
-    song[17].note = G4;
-    song[17].beats = 2;
-    //Bar 6
-    song[18].note = 0;
-    song[18].beats = 4;
-    song[19].note = E4;
-    song[19].beats = 2;
-    song[20].note = 0;
-    song[20].beats = 2;
-    //Bar 7
-    song[21].note = 0;
-    song[21].beats = 2;
-    song[22].note = A4;
-    song[22].beats = 2;
-    song[23].note = 0;
-    song[23].beats = 2;
-    song[24].note = B4;
-    song[24].beats = 2;
-    //Bar 8 
-    song[25].note = 0;
-    song[25].beats = 2;
-    song[26].note = A4s;
-    song[26].beats = 2;
-    song[27].note = A4;
-    song[27].beats = 2;
-    song[28].note = 0;
-    song[28].beats = 2;
-    //Bar 9  
-    song[29].note = G4;
-    song[29].beats = 4;
-    song[30].note = E5;
-    song[30].beats = 4;
-    song[31].note = G5;
-    song[31].beats = 4;
-    //Bar 10  
-    song[32].note = A5;
-    song[32].beats = 2;
-    song[33].note = 0;
-    song[33].beats = 2;
-    song[34].note = F5;
-    song[34].beats = 2;
-    song[35].note = G5;
-    song[35].beats = 2;
-    //Bar 11  
-    song[36].note = 0;
-    song[36].beats = 2;
-    song[37].note = E5;
-    song[37].beats = 2;
-    song[38].note = 0;
-    song[38].beats = 2;
-    song[39].note = C5;
-    song[39].beats = 2;
-    //Bar 12  
-    song[40].note = D5;
-    song[40].beats = 2;
-    song[41].note = B4;
-    song[41].beats = 2;
-    song[42].note = 0;
-    song[42].beats = 4;
-    //Bar 13  
-    song[43].note = C5;
-    song[43].beats = 2;
-    song[44].note = 0;
-    song[44].beats = 2;
-    song[45].note = 0;
-    song[45].beats = 2;
-    song[46].note = G4;
-    song[46].beats = 2;
-    //Bar 14  
-    song[47].note = 0;
-    song[47].beats = 4;
-    song[48].note = E4;
-    song[48].beats = 2;
-    song[49].note = 0;
-    song[49].beats = 2;
-    //Bar 15
-    song[50].note = 0;
-    song[50].beats = 2;
-    song[51].note = A4;
-    song[51].note = 2;
-    song[52].note = 0;
-    song[52].beats = 2;
-    song[53].beats = B4;
-    song[53].beats = 2;
-    //Bar 16
-    song[54].note = 0;
-    song[54].beats = 2;
-    song[55].note = A4s;
-    song[55].note = 2;
-    song[56].note = A4;
-    song[56].beats = 2;
-    song[57].beats = 0;
-    song[57].beats = 2;
-    //Bar 17
-    song[58].note = song[29].note;
-    song[58].beats = song[29].beats;
-    song[59].note = song[30].note;
-    song[59].beats = song[30].beats;
-    song[60].note = song[31].note;
-    song[60].beats = song[31].beats;
-    //Bar 18
-    song[61].note = song[32].note;
-    song[61].beats = song[32].beats;
-    song[62].note = song[33].note;
-    song[62].beats = song[33].beats;
-    song[63].note = song[34].note;
-    song[63].beats = song[34].beats;
-    song[64].note = song[35].note;
-    song[64].beats = song[35].beats;
-    //Bar 19
-    song[65].note = song[36].note;
-    song[65].beats = song[36].beats;
-    song[66].note = song[37].note;
-    song[66].beats = song[37].beats;
-    song[67].note = song[38].note;
-    song[67].beats = song[38].beats;
-    song[68].note = song[39].note;
-    song[68].beats = song[39].beats;
-    //Bar 20 
-    song[69].note = song[40].note;
-    song[69].beats = song[40].beats;
-    song[70].note = song[41].note;
-    song[70].beats = song[41].beats;
-    song[71].note = song[42].note;
-    song[71].beats = song[42].beats;
-    //Bar 21 
-    song[72].note = 0;
-    song[72].beats = 4;
-    song[73].note = G5;
-    song[73].beats = 2;
-    song[74].note = F5s;
-    song[74].beats = 2;
-    //Bar 22 
-    song[75].note = F5;
-    song[75].beats = 2;
-    song[76].note = D5s;
-    song[76].beats = 2;
-    song[77].note = 0;
-    song[77].beats = 2;
-    song[78].note = E5;
-    song[78].beats = 2;
-    //Bar 23 
-    song[79].note = 0;
-    song[79].beats = 2;
-    song[80].note = G4s;
-    song[80].beats = 2;
-    song[81].note = A4;
-    song[81].beats = 2;
-    song[82].note = C5;
-    song[82].beats = 2;
-    //Bar 24 
-    song[83].note = 0;
-    song[83].beats = 2;
-    song[84].note = A4;
-    song[84].beats = 2;
-    song[85].note = C5;
-    song[85].beats = 2;
-    song[86].note = D5;
-    song[86].beats = 2;
-    //Bar 25 
-    song[87].note = song[72].note;
-    song[87].beats = song[72].beats;
-    song[88].note = song[73].note;
-    song[88].beats = song[73].beats;
-    song[89].note = song[74].note;
-    song[89].beats = song[74].beats;
-    //Bar 26 
-    song[90].note = song[75].note;
-    song[90].beats = song[75].beats;
-    song[91].note = song[76].note;
-    song[91].beats = song[76].beats;
-    song[92].note = song[77].note;
-    song[92].beats = song[77].beats;
-    song[93].note = song[78].note;
-    song[93].beats = song[78].beats;
-    //Bar 27 
-    song[94].note = 0;
-    song[94].beats = 2;
-    song[95].note = C6;
-    song[95].beats = 2;
-    song[96].note = 0;
-    song[96].beats = 2;
-    song[97].note = C6;
-    song[97].beats = 2;
-    //Bar 28 
-    song[98].note = C6;
-    song[98].beats = 2;
-    song[99].note = 0;
-    song[99].beats = 2;
-    song[100].note = 0;
-    song[100].beats = 4;
-    //Bar 29 
-    song[101].note = song[72].note;
-    song[101].beats = song[72].beats;
-    song[102].note = songs[73].note;
-    song[102].beats = songs[73].beats;
-    song[103].note = songs[74].note;
-    song[103].beats = songs[74].beats;
-    //Bar 30 
-    song[104].note = song[75].note;
-    song[104].beats = song[75].beats;
-    song[105].note = songs[76].note;
-    song[105].beats = songs[76].beats;
-    song[106].note = songs[77].note;
-    song[106].beats = songs[77].beats;
-    song[107].note = songs[78].note;
-    song[107].beats = songs[78].beats;
-    //Bar 31 
-    song[108].note = song[79].note;
-    song[108].beats = song[79].beats;
-    song[109].note = songs[80].note;
-    song[109].beats = songs[80].beats;
-    song[110].note = songs[81].note;
-    song[110].beats = songs[81].beats;
-    song[111].note = songs[82].note;
-    song[111].beats = songs[82].beats;
-    //Bar 31 
-    song[112].note = song[83].note;
-    song[112].beats = song[83].beats;
-    song[113].note = songs[84].note;
-    song[113].beats = songs[84].beats;
-    song[114].note = songs[85].note;
-    song[114].beats = songs[85].beats;
-    song[115].note = songs[86].note;
-    song[115].beats = songs[86].beats;
-    //Bar 32 
-    song[116].note = 0;
-    song[116].beats = 4;
-    song[117].note = D5s;
-    song[117].beats = 2;
-    song[118].note = 0;
-    song[118].beats = 2;
-    //Bar 33 
-    song[119].note = 0;
-    song[119].beats = 2;
-    song[120].note = D5;
-    song[120].beats = 2;
-    song[121].note = 0;
-    song[121].beats = 4;
-    //Bar 34 
-    song[122].note = C5;
-    song[122].beats = 2;
-    song[123].note = 0;
-    song[123].beats = 2;
-    song[124].note = 0;
-    song[124].beats = 4;
-
-    lastNote.note = 0;
-    lastNote.beats = 39;
-    runstp = 0;
-
-    //Make the board
-    board[0] = NOTE3;
-    board[1] = NOTE3;
-    board[2] = NOTE0;
-    board[3] = NOTE3;
-
-    board[4] = NOTE0;
-    board[5] = NOTE2;
-    board[6] = NOTE3;
-    board[7] = NOTE0;
-
-    board[8] = NOTE4;
-    board[9] = NOTE0;
-    board[10] = NOTE0;
-    board[11] = NOTE1;
-
-    board[12] = NOTE0;
-    board[13] = NOTE0;
-    board[14] = NOTE24;
-    board[15] = NOTE0;
-
-    board[16] = NOTE0;
-    board[17] = NOTE0;
-    board[18] = NOTE0;
-    board[19] = NOTE3;
-
-    board[20] = NOTE0;
-    board[21] = NOTE0;
-    board[22] = NOTE2;
-    board[23] = NOTE0;
-
-    board[24] = NOTE3;//2
-    board[25] = NOTE0;//0
-    board[26] = NOTE2;//4
-    board[27] = NOTE1;//8
-
-    board[28] = NOTE0;
-    board[29] = NOTE3;
-    board[30] = NOTE4;
-    board[31] = NOTE3;
-
-    board[32] = NOTE4;
-    board[33] = NOTE0;
-    board[34] = NOTE1;
-    board[35] = NOTE1;
-
-    board[36] = NOTE0;
-    board[37] = NOTE2;
-    board[38] = NOTE0;
-    board[39] = NOTE3;
-
-    board[40] = NOTE23;
-    board[41] = NOTE0;
-}
 	 		  			 		  		
 /*	 		  			 		  		
 ***********************************************************************
@@ -1118,3 +773,452 @@ void outchar(char x) {
 }
 
 
+void populate_song() {
+    //Bar 1
+    song[0].note = E5;
+    song[0].beats = 2;
+    song[1].note = E5;
+    song[1].beats = 2;
+    song[2].note =  0;
+    song[2].beats = 2;
+    song[3].note = E5;
+    song[3].beats = 2;
+    //Bar 2 
+    song[4].note = 0;
+    song[4].beats = 2;
+    song[5].note = C5;
+    song[5].beats = 2;
+    song[6].note =  E5;
+    song[6].beats = 2;
+    song[7].note = 0;
+    song[7].beats = 2;
+    //Bar 3 
+    song[8].note = G5;
+    song[8].beats = 2;
+    song[9].note = 0;
+    song[9].beats = 2;
+    song[10].note = 0;
+    song[10].beats = 4;
+    //Bar 4 
+    song[11].note = G4;
+    song[11].beats = 2;
+    song[12].note = 0;
+    song[12].beats = 2;
+    song[13].note = 0;
+    song[13].beats = 4;
+    //Bar 5 
+    song[14].note = C5;
+    song[14].beats = 2;
+    song[15].note = 0;
+    song[15].beats = 2;
+    song[16].note = 0;
+    song[16].beats = 2;
+    song[17].note = G4;
+    song[17].beats = 2;
+    //Bar 6
+    song[18].note = 0;
+    song[18].beats = 4;
+    song[19].note = E4;
+    song[19].beats = 2;
+    song[20].note = 0;
+    song[20].beats = 2;
+    //Bar 7
+    song[21].note = 0;
+    song[21].beats = 2;
+    song[22].note = A4;
+    song[22].beats = 2;
+    song[23].note = 0;
+    song[23].beats = 2;
+    song[24].note = B4;
+    song[24].beats = 2;
+    //Bar 8 
+    song[25].note = 0;
+    song[25].beats = 2;
+    song[26].note = A4s;
+    song[26].beats = 2;
+    song[27].note = A4;
+    song[27].beats = 2;
+    song[28].note = 0;
+    song[28].beats = 2;
+    //Bar 9  
+    song[29].note = G4;
+    song[29].beats = 4;
+    song[30].note = E5;
+    song[30].beats = 4;
+    song[31].note = G5;
+    song[31].beats = 4;
+    //Bar 10  
+    song[32].note = A5;
+    song[32].beats = 2;
+    song[33].note = 0;
+    song[33].beats = 2;
+    song[34].note = F5;
+    song[34].beats = 2;
+    song[35].note = G5;
+    song[35].beats = 2;
+    //Bar 11  
+    song[36].note = 0;
+    song[36].beats = 2;
+    song[37].note = E5;
+    song[37].beats = 2;
+    song[38].note = 0;
+    song[38].beats = 2;
+    song[39].note = C5;
+    song[39].beats = 2;
+    //Bar 12  
+    song[40].note = D5;
+    song[40].beats = 2;
+    song[41].note = B4;
+    song[41].beats = 2;
+    song[42].note = 0;
+    song[42].beats = 4;
+    //Bar 13  
+    song[43].note = C5;
+    song[43].beats = 2;
+    song[44].note = 0;
+    song[44].beats = 2;
+    song[45].note = 0;
+    song[45].beats = 2;
+    song[46].note = G4;
+    song[46].beats = 2;
+    //Bar 14  
+    song[47].note = 0;
+    song[47].beats = 4;
+    song[48].note = E4;
+    song[48].beats = 2;
+    song[49].note = 0;
+    song[49].beats = 2;
+    //Bar 15
+    song[50].note = 0;
+    song[50].beats = 2;
+    song[51].note = A4;
+    song[51].note = 2;
+    song[52].note = 0;
+    song[52].beats = 2;
+    song[53].beats = B4;
+    song[53].beats = 2;
+    //Bar 16
+    song[54].note = 0;
+    song[54].beats = 2;
+    song[55].note = A4s;
+    song[55].note = 2;
+    song[56].note = A4;
+    song[56].beats = 2;
+    song[57].beats = 0;
+    song[57].beats = 2;
+    //Bar 17
+    song[58].note = song[29].note;
+    song[58].beats = song[29].beats;
+    song[59].note = song[30].note;
+    song[59].beats = song[30].beats;
+    song[60].note = song[31].note;
+    song[60].beats = song[31].beats;
+    //Bar 18
+    song[61].note = song[32].note;
+    song[61].beats = song[32].beats;
+    song[62].note = song[33].note;
+    song[62].beats = song[33].beats;
+    song[63].note = song[34].note;
+    song[63].beats = song[34].beats;
+    song[64].note = song[35].note;
+    song[64].beats = song[35].beats;
+    //Bar 19
+    song[65].note = song[36].note;
+    song[65].beats = song[36].beats;
+    song[66].note = song[37].note;
+    song[66].beats = song[37].beats;
+    song[67].note = song[38].note;
+    song[67].beats = song[38].beats;
+    song[68].note = song[39].note;
+    song[68].beats = song[39].beats;
+    //Bar 20 
+    song[69].note = song[40].note;
+    song[69].beats = song[40].beats;
+    song[70].note = song[41].note;
+    song[70].beats = song[41].beats;
+    song[71].note = song[42].note;
+    song[71].beats = song[42].beats;
+    //Bar 21 
+    song[72].note = 0;
+    song[72].beats = 4;
+    song[73].note = G5;
+    song[73].beats = 2;
+    song[74].note = F5s;
+    song[74].beats = 2;
+    //Bar 22 
+    song[75].note = F5;
+    song[75].beats = 2;
+    song[76].note = D5s;
+    song[76].beats = 2;
+    song[77].note = 0;
+    song[77].beats = 2;
+    song[78].note = E5;
+    song[78].beats = 2;
+    //Bar 23 
+    song[79].note = 0;
+    song[79].beats = 2;
+    song[80].note = G4s;
+    song[80].beats = 2;
+    song[81].note = A4;
+    song[81].beats = 2;
+    song[82].note = C5;
+    song[82].beats = 2;
+    //Bar 24 
+    song[83].note = 0;
+    song[83].beats = 2;
+    song[84].note = A4;
+    song[84].beats = 2;
+    song[85].note = C5;
+    song[85].beats = 2;
+    song[86].note = D5;
+    song[86].beats = 2;
+    //Bar 25 
+    song[87].note = song[72].note;
+    song[87].beats = song[72].beats;
+    song[88].note = song[73].note;
+    song[88].beats = song[73].beats;
+    song[89].note = song[74].note;
+    song[89].beats = song[74].beats;
+    //Bar 26 
+    song[90].note = song[75].note;
+    song[90].beats = song[75].beats;
+    song[91].note = song[76].note;
+    song[91].beats = song[76].beats;
+    song[92].note = song[77].note;
+    song[92].beats = song[77].beats;
+    song[93].note = song[78].note;
+    song[93].beats = song[78].beats;
+    //Bar 27 
+    song[94].note = 0;
+    song[94].beats = 2;
+    song[95].note = C6;
+    song[95].beats = 2;
+    song[96].note = 0;
+    song[96].beats = 2;
+    song[97].note = C6;
+    song[97].beats = 2;
+    //Bar 28 
+    song[98].note = C6;
+    song[98].beats = 2;
+    song[99].note = 0;
+    song[99].beats = 2;
+    song[100].note = 0;
+    song[100].beats = 4;
+    //Bar 29 
+    song[101].note = song[72].note;
+    song[101].beats = song[72].beats;
+    song[102].note = songs[73].note;
+    song[102].beats = songs[73].beats;
+    song[103].note = songs[74].note;
+    song[103].beats = songs[74].beats;
+    //Bar 30 
+    song[104].note = song[75].note;
+    song[104].beats = song[75].beats;
+    song[105].note = songs[76].note;
+    song[105].beats = songs[76].beats;
+    song[106].note = songs[77].note;
+    song[106].beats = songs[77].beats;
+    song[107].note = songs[78].note;
+    song[107].beats = songs[78].beats;
+    //Bar 31 
+    song[108].note = song[79].note;
+    song[108].beats = song[79].beats;
+    song[109].note = songs[80].note;
+    song[109].beats = songs[80].beats;
+    song[110].note = songs[81].note;
+    song[110].beats = songs[81].beats;
+    song[111].note = songs[82].note;
+    song[111].beats = songs[82].beats;
+    //Bar 31 
+    song[112].note = song[83].note;
+    song[112].beats = song[83].beats;
+    song[113].note = songs[84].note;
+    song[113].beats = songs[84].beats;
+    song[114].note = songs[85].note;
+    song[114].beats = songs[85].beats;
+    song[115].note = songs[86].note;
+    song[115].beats = songs[86].beats;
+    //Bar 32 
+    song[116].note = 0;
+    song[116].beats = 4;
+    song[117].note = D5s;
+    song[117].beats = 2;
+    song[118].note = 0;
+    song[118].beats = 2;
+    //Bar 33 
+    song[119].note = 0;
+    song[119].beats = 2;
+    song[120].note = D5;
+    song[120].beats = 2;
+    song[121].note = 0;
+    song[121].beats = 4;
+    //Bar 34 
+    song[122].note = C5;
+    song[122].beats = 2;
+    song[123].note = 0;
+    song[123].beats = 2;
+    song[124].note = 0;
+    song[124].beats = 4;
+
+    lastNote.note = 0;
+    lastNote.beats = 39;
+    runstp = 0;
+
+    //Make the board
+    board[0] = NOTE3;
+    board[1] = NOTE3;
+    board[2] = NOTE0;
+    board[3] = NOTE3;
+
+    board[4] = NOTE0;
+    board[5] = NOTE2;
+    board[6] = NOTE3;
+    board[7] = NOTE0;
+
+    board[8] = NOTE4;
+    board[9] = NOTE0;
+    board[10] = NOTE0;
+    board[11] = NOTE1;
+
+    board[12] = NOTE0;
+    board[13] = NOTE0;
+    board[14] = NOTE24;
+    board[15] = NOTE0;
+
+    board[16] = NOTE0;
+    board[17] = NOTE0;
+    board[18] = NOTE0;
+    board[19] = NOTE3;
+
+    board[20] = NOTE0;
+    board[21] = NOTE0;
+    board[22] = NOTE2;
+    board[23] = NOTE0;
+
+    board[24] = NOTE3;//2
+    board[25] = NOTE0;//0
+    board[26] = NOTE2;//4
+    board[27] = NOTE1;//8
+
+    board[28] = NOTE0;
+    board[29] = NOTE3;
+    board[30] = NOTE4;
+    board[31] = NOTE3;
+
+    board[32] = NOTE4;
+    board[33] = NOTE0;
+    board[34] = NOTE1;
+    board[35] = NOTE1;
+
+    board[36] = NOTE0;
+    board[37] = NOTE2;
+    board[38] = NOTE0;
+    board[39] = NOTE3;
+
+    board[40] = NOTE23;
+    board[41] = NOTE0;
+    board[42] = NOTE3;
+    board[43] = NOTE3;
+    board[44] = NOTE0;
+    board[45] = NOTE3;
+
+    board[46] = NOTE0;
+    board[47] = NOTE2;
+    board[48] = NOTE3;
+    board[49] = NOTE0;
+
+    board[50] = NOTE4;
+    board[51] = NOTE0;
+    board[52] = NOTE0;
+    board[53] = NOTE1;
+
+    board[53] = NOTE0;
+    board[54] = NOTE0;
+    board[55] = NOTE24;
+    board[56] = NOTE0;
+
+    board[57] = NOTE0;
+    board[58] = NOTE0;
+    board[59] = NOTE0;
+    board[60] = NOTE3;
+
+    board[61] = NOTE0;
+    board[62] = NOTE0;
+    board[63] = NOTE2;
+    board[64] = NOTE0;
+
+    board[65] = NOTE3;//2
+    board[66] = NOTE0;//0
+    board[67] = NOTE2;//4
+    board[68] = NOTE1;//8
+
+    board[69] = NOTE0;
+    board[70] = NOTE3;
+    board[71] = NOTE4;
+    board[72] = NOTE3;
+
+    board[73] = NOTE4;
+    board[74] = NOTE0;
+    board[75] = NOTE1;
+    board[76] = NOTE1;
+
+    board[77] = NOTE0;
+    board[78] = NOTE2;
+    board[79] = NOTE0;
+    board[80] = NOTE3;
+
+    board[81] = NOTE23;
+    board[82] = NOTE0;
+
+    board[83] = NOTE23;
+    board[84] = NOTE0;
+    board[85] = NOTE3;
+    board[86] = NOTE3;
+    board[87] = NOTE0;
+    board[88] = NOTE3;
+
+    board[89] = NOTE0;
+    board[90] = NOTE2;
+    board[91] = NOTE3;
+    board[92] = NOTE0;
+
+    board[93] = NOTE4;
+    board[94] = NOTE0;
+    board[95] = NOTE0;
+    board[96] = NOTE1;
+
+    board[97] = NOTE0;
+    board[98] = NOTE0;
+    board[99] = NOTE24;
+    board[100] = NOTE0;
+
+    board[101] = NOTE0;
+    board[102] = NOTE0;
+    board[103] = NOTE0;
+    board[104] = NOTE3;
+
+    board[105] = NOTE0;
+    board[106] = NOTE0;
+    board[107] = NOTE2;
+    board[108] = NOTE0;
+
+    board[109] = NOTE3;//2
+    board[110] = NOTE0;//0
+    board[111] = NOTE2;//4
+    board[112] = NOTE1;//8
+
+    board[113] = NOTE0;
+    board[114] = NOTE3;
+    board[115] = NOTE4;
+    board[116] = NOTE3;
+
+    board[117] = NOTE4;
+    board[118] = NOTE0;
+    board[119] = NOTE1;
+    board[120] = NOTE1;
+
+    board[121] = NOTE0;
+    board[122] = NOTE2;
+    board[123] = NOTE0;
+    board[124] = NOTE3;
+}
