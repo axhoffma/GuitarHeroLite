@@ -181,7 +181,7 @@ int boardPtr = 0;
 #define NOTE3 0x20
 #define NOTE4 0x10
 
-#define NOTE12 0xB0
+#define NOTE12 0xC0
 #define NOTE13 0xA0
 #define NOTE14 0x90
 
