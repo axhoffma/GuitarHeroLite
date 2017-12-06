@@ -1,21 +1,21 @@
 /*
 ************************************************************************
- ECE 362 - Mini-Project C Source File - Fall 2016
+ ECE 362 - Mini-Project C Source File - Fall 2017
 ***********************************************************************
 	 	   			 		  			 		  		
- Team ID: < ? >
+ Team ID: 17
 
- Project Name: < ? >
+ Project Name: ASCII Hero 
 
  Team Members:
 
-   - Team/Doc Leader: < ? >      Signature: ______________________
+   - Team/Doc Leader: Tim Duex      Signature: ______________________
    
-   - Software Leader: < ? >      Signature: ______________________
+   - Software Leader: Austin Hoffmann      Signature: Austin Hoffmann
 
-   - Interface Leader: < ? >     Signature: ______________________
+   - Interface Leader: Antonio Mojena     Signature: _____________________
 
-   - Peripheral Leader: < ? >    Signature: ______________________
+   - Peripheral Leader: John Reitz    Signature: ______________________
 
 
  Academic Honesty Statement:  In signing above, we hereby certify that we 
@@ -26,7 +26,11 @@
 
 ***********************************************************************
 
- The objective of this Mini-Project is to .... < ? >
+ The objective of this Mini-Project is to create a simple game based on
+ the popular game "Guitar Hero". Notes will scroll at a continuous pace,
+ and the user tries to time a pushbutton press to coincide with the music
+ that is being played. Scores are tracked, with the high score being
+ displayed to the user. 
 
 
 ***********************************************************************
@@ -34,16 +38,16 @@
  List of project-specific success criteria (functionality that will be
  demonstrated):
 
- 1. Output a sound based off of if the player hit the note at the right
-    time
+ 1. PLay a simple song "Mario theme music in this case 
 
- 2. Display the "game board" of notes that the player needs to hit
-
+ 2. Display the "game board" of notes that the player needs to hit, which
+    updates at continuous intervals
+ 
  3. Display the player's score on the LED screen
 
- 4.
+ 4. Display a welcome message to the user
 
- 5.
+ 5. Have the option to "play again" after the song ends
 
 ***********************************************************************
 
@@ -51,7 +55,7 @@
 
   Update history (add an entry every time a significant change is made):
 
-  Date: < ? >  Name: < ? >   Update: < ? >
+  Date: 12/5/2017  Name: Austin Hoffmann  Update: First Complete prototype
 
   Date: < ? >  Name: < ? >   Update: < ? >
 
@@ -138,7 +142,7 @@ int displayCnt = 0;
 int beatCount = 1;
 
 /*Array of Notes that represents the song */
-#define SONG_SIZE 43 
+#define SONG_SIZE 125 
 Note song[SONG_SIZE];
 //Need to start at -1 so the first increment gets song[0]
 int songPtr = 0;
@@ -360,6 +364,193 @@ void populate_song() {
     song[41].beats = 2;
     song[42].note = 0;
     song[42].beats = 4;
+    //Bar 13  
+    song[43].note = C5;
+    song[43].beats = 2;
+    song[44].note = 0;
+    song[44].beats = 2;
+    song[45].note = 0;
+    song[45].beats = 2;
+    song[46].note = G4;
+    song[46].beats = 2;
+    //Bar 14  
+    song[47].note = 0;
+    song[47].beats = 4;
+    song[48].note = E4;
+    song[48].beats = 2;
+    song[49].note = 0;
+    song[49].beats = 2;
+    //Bar 15
+    song[50].note = 0;
+    song[50].beats = 2;
+    song[51].note = A4;
+    song[51].note = 2;
+    song[52].note = 0;
+    song[52].beats = 2;
+    song[53].beats = B4;
+    song[53].beats = 2;
+    //Bar 16
+    song[54].note = 0;
+    song[54].beats = 2;
+    song[55].note = A4s;
+    song[55].note = 2;
+    song[56].note = A4;
+    song[56].beats = 2;
+    song[57].beats = 0;
+    song[57].beats = 2;
+    //Bar 17
+    song[58].note = song[29].note;
+    song[58].beats = song[29].beats;
+    song[59].note = song[30].note;
+    song[59].beats = song[30].beats;
+    song[60].note = song[31].note;
+    song[60].beats = song[31].beats;
+    //Bar 18
+    song[61].note = song[32].note;
+    song[61].beats = song[32].beats;
+    song[62].note = song[33].note;
+    song[62].beats = song[33].beats;
+    song[63].note = song[34].note;
+    song[63].beats = song[34].beats;
+    song[64].note = song[35].note;
+    song[64].beats = song[35].beats;
+    //Bar 19
+    song[65].note = song[36].note;
+    song[65].beats = song[36].beats;
+    song[66].note = song[37].note;
+    song[66].beats = song[37].beats;
+    song[67].note = song[38].note;
+    song[67].beats = song[38].beats;
+    song[68].note = song[39].note;
+    song[68].beats = song[39].beats;
+    //Bar 20 
+    song[69].note = song[40].note;
+    song[69].beats = song[40].beats;
+    song[70].note = song[41].note;
+    song[70].beats = song[41].beats;
+    song[71].note = song[42].note;
+    song[71].beats = song[42].beats;
+    //Bar 21 
+    song[72].note = 0;
+    song[72].beats = 4;
+    song[73].note = G5;
+    song[73].beats = 2;
+    song[74].note = F5s;
+    song[74].beats = 2;
+    //Bar 22 
+    song[75].note = F5;
+    song[75].beats = 2;
+    song[76].note = D5s;
+    song[76].beats = 2;
+    song[77].note = 0;
+    song[77].beats = 2;
+    song[78].note = E5;
+    song[78].beats = 2;
+    //Bar 23 
+    song[79].note = 0;
+    song[79].beats = 2;
+    song[80].note = G4s;
+    song[80].beats = 2;
+    song[81].note = A4;
+    song[81].beats = 2;
+    song[82].note = C5;
+    song[82].beats = 2;
+    //Bar 24 
+    song[83].note = 0;
+    song[83].beats = 2;
+    song[84].note = A4;
+    song[84].beats = 2;
+    song[85].note = C5;
+    song[85].beats = 2;
+    song[86].note = D5;
+    song[86].beats = 2;
+    //Bar 25 
+    song[87].note = song[72].note;
+    song[87].beats = song[72].beats;
+    song[88].note = song[73].note;
+    song[88].beats = song[73].beats;
+    song[89].note = song[74].note;
+    song[89].beats = song[74].beats;
+    //Bar 26 
+    song[90].note = song[75].note;
+    song[90].beats = song[75].beats;
+    song[91].note = song[76].note;
+    song[91].beats = song[76].beats;
+    song[92].note = song[77].note;
+    song[92].beats = song[77].beats;
+    song[93].note = song[78].note;
+    song[93].beats = song[78].beats;
+    //Bar 27 
+    song[94].note = 0;
+    song[94].beats = 2;
+    song[95].note = C6;
+    song[95].beats = 2;
+    song[96].note = 0;
+    song[96].beats = 2;
+    song[97].note = C6;
+    song[97].beats = 2;
+    //Bar 28 
+    song[98].note = C6;
+    song[98].beats = 2;
+    song[99].note = 0;
+    song[99].beats = 2;
+    song[100].note = 0;
+    song[100].beats = 4;
+    //Bar 29 
+    song[101].note = song[72].note;
+    song[101].beats = song[72].beats;
+    song[102].note = songs[73].note;
+    song[102].beats = songs[73].beats;
+    song[103].note = songs[74].note;
+    song[103].beats = songs[74].beats;
+    //Bar 30 
+    song[104].note = song[75].note;
+    song[104].beats = song[75].beats;
+    song[105].note = songs[76].note;
+    song[105].beats = songs[76].beats;
+    song[106].note = songs[77].note;
+    song[106].beats = songs[77].beats;
+    song[107].note = songs[78].note;
+    song[107].beats = songs[78].beats;
+    //Bar 31 
+    song[108].note = song[79].note;
+    song[108].beats = song[79].beats;
+    song[109].note = songs[80].note;
+    song[109].beats = songs[80].beats;
+    song[110].note = songs[81].note;
+    song[110].beats = songs[81].beats;
+    song[111].note = songs[82].note;
+    song[111].beats = songs[82].beats;
+    //Bar 31 
+    song[112].note = song[83].note;
+    song[112].beats = song[83].beats;
+    song[113].note = songs[84].note;
+    song[113].beats = songs[84].beats;
+    song[114].note = songs[85].note;
+    song[114].beats = songs[85].beats;
+    song[115].note = songs[86].note;
+    song[115].beats = songs[86].beats;
+    //Bar 32 
+    song[116].note = 0;
+    song[116].beats = 4;
+    song[117].note = D5s;
+    song[117].beats = 2;
+    song[118].note = 0;
+    song[118].beats = 2;
+    //Bar 33 
+    song[119].note = 0;
+    song[119].beats = 2;
+    song[120].note = D5;
+    song[120].beats = 2;
+    song[121].note = 0;
+    song[121].beats = 4;
+    //Bar 34 
+    song[122].note = C5;
+    song[122].beats = 2;
+    song[123].note = 0;
+    song[123].beats = 2;
+    song[124].note = 0;
+    song[124].beats = 4;
 
     lastNote.note = 0;
     lastNote.beats = 39;
