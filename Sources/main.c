@@ -15,7 +15,7 @@
 
    - Interface Leader: Antonio Mojena     Signature: _____________________
 
-   - Peripheral Leader: John Reitz    Signature: ______________________
+   - Peripheral Leader: Jonathan Reitz    Signature: Jonathan Reitz
 
 
  Academic Honesty Statement:  In signing above, we hereby certify that we 
