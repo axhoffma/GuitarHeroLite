@@ -9,11 +9,11 @@
 
  Team Members:
 
-   - Team/Doc Leader: Tim Duex      Signature: ______________________
+   - Team/Doc Leader: Tim Duex      Signature: Tim Duex
    
    - Software Leader: Austin Hoffmann      Signature: Austin Hoffmann
 
-   - Interface Leader: Antonio Mojena     Signature: _____________________
+   - Interface Leader: Antonio Mojena     Signature: Antonio Mojena
 
    - Peripheral Leader: Jonathan Reitz    Signature: Jonathan Reitz
 
